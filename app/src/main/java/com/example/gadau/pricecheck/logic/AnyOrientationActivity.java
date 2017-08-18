@@ -1,4 +1,4 @@
-package com.example.gadau.pricecheck;
+package com.example.gadau.pricecheck.logic;
 
 import com.journeyapps.barcodescanner.CaptureActivity;
 

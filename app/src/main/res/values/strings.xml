@@ -10,4 +10,15 @@
     <string name="desc1">Use the built-in barcode scanner to identify or add new items</string>
     <string name="desc2">Find item by ID using keyboard input</string>
     <string name="desc3">Update the internal database with newly loaded source file</string>
+
+    <string name="sample_id">4005808801022</string>
+    <string name="sample_desc">COLORBOOK 12PK   </string>
+    <string name="sample_dollarsign">$</string>
+    <string name="sample_dollars">123</string>
+    <string name="sample_cents">99</string>
+
+    <string name="progress_msg">Loading Database. This could take a while.</string>
+
+    <string name="str_button_purge">Purge</string>
+    <string name="str_button_help">Help</string>
 </resources>

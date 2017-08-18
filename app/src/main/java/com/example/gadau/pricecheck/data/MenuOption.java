@@ -1,4 +1,4 @@
-package com.example.gadau.pricecheck;
+package com.example.gadau.pricecheck.data;
 
 /**
  * Created by gadau on 8/10/2017.

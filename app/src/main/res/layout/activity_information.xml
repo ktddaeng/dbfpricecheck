@@ -1,9 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    android:padding="16dp"
     tools:context="com.example.gadau.pricecheck.InformationActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:id="@+id/button_cancel"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_cancel_white_36dp"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="34sp"
+            android:layout_marginTop="34dp"
+            android:textColor="@color/colorMenuText"
+            android:text="#"/>
+        <TextView
+            android:id="@+id/info_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="34sp"
+            android:layout_marginTop="34dp"
+            android:textColor="@color/colorMenuText"
+            tools:text="@string/sample_id"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/info_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textColor="@color/colorMenuText"
+        tools:text="@string/sample_desc"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="top">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="56sp"
+            android:paddingTop="24dp"
+            android:textColor="@color/colorMenuText"
+            android:text="@string/sample_dollarsign"/>
+        <TextView
+            android:id="@+id/info_dollars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="112sp"
+            android:padding="2dp"
+            android:textColor="@color/colorMenuText"
+            tools:text="@string/sample_dollars"/>
+        <TextView
+            android:id="@+id/info_cents"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="16dp"
+            android:textSize="56sp"
+            android:textColor="@color/colorMenuText"
+            tools:text="@string/sample_cents"/>
+    </LinearLayout>
+</LinearLayout>

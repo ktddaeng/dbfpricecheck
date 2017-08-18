@@ -1,13 +1,15 @@
-package com.example.gadau.pricecheck;
+package com.example.gadau.pricecheck.logic;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.gadau.pricecheck.R;
+import com.example.gadau.pricecheck.data.MenuOption;
 
 import java.util.List;
 
