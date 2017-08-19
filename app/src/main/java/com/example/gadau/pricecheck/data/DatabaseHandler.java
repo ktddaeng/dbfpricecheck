@@ -2,16 +2,17 @@ package com.example.gadau.pricecheck.data;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.example.gadau.pricecheck.javadbf.DBFField;
+import com.example.gadau.pricecheck.javadbf.DBFReader;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,12 +27,18 @@ import au.com.bytecode.opencsv.CSVReader;
 public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "priceInventory";
     public static final String TABLE_INVENTORY = "inventory";
+    public static final String TABLE_LOG = "shiplog";
     public static final int DATABASE_VERSION = 1;
+    private String[] months = {"Month", "Jan", "Feb", "Mar", "Apr",
+                    "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
     private static final String KEY_ID = "inventory_id";
     private static final String KEY_ITEMNO = "iventory_barcode";
     private static final String KEY_DESC = "inventory_desc";
     private static final String KEY_PRICE = "inventory_price";
+    private static final String KEY_VENDOR = "log_vendor";
+    private static final String KEY_RECEIVED = "log_received";
+    private static final String KEY_DATE = "log_date";
 
     private static DatabaseHandler instance;
 
@@ -52,6 +59,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 TABLE_INVENTORY + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + KEY_ITEMNO + " TEXT, " + KEY_DESC + " TEXT, " + KEY_PRICE + " TEXT)";
         db.execSQL(CREATE_INVENTORY);
+
+        String CREATE_LOG = "CREATE TABLE " +
+                TABLE_LOG + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + KEY_ITEMNO + " TEXT, " + KEY_VENDOR  + " TEXT, " + KEY_RECEIVED  + " INTEGER, " + KEY_DATE + " TEXT)";
+        db.execSQL(CREATE_LOG);
     }
 
     @Override
@@ -114,25 +126,134 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return ct;
     }
 
+    public int getItemLogCount() {
+        String countQuery = "SELECT * FROM " + TABLE_LOG;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int ct = cursor.getCount();
+        cursor.close();
+        return ct;
+    }
+
+    public List<LogItem> getListofData(String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<LogItem> listItems = new ArrayList<>();
+        Cursor cursor = db.query(TABLE_LOG,
+                new String[]{ KEY_ID, KEY_ITEMNO, KEY_VENDOR, KEY_RECEIVED, KEY_DATE},
+                KEY_ITEMNO + "=?",
+                new String[]{id},
+                null, null, KEY_DATE + " ASC", "5");
+
+        LogItem di = null;
+        if (cursor.moveToFirst()) {
+            do {
+                di = new LogItem();
+                di.setID(cursor.getString(1));
+                di.setVendor(cursor.getString(2));
+                di.setReceive(cursor.getString(3));
+                di.setDate(cursor.getString(4));
+                listItems.add(di);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return listItems;
+    }
+
     public void clearDatabase() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_INVENTORY);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOG);
         onCreate(db);
     }
 
-    public void importDatabase() {
+    public void importDatabase(boolean master) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.beginTransaction();
-        //clear table
-        clearDatabase();
 
-        String filename = "SCINVT.csv";
-        final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsoluteFile(), filename);
-        //TODO: Convert DBF into SQLite
+        //String filename = "SCINVT.csv";
+
+        //TODO: Convert DBF into SQLite, save to internal CSV file
         //Currently cannot import DBF directly into app, must be converted into CSV using Excel
         //We need the following columns: ID(0), Desc(3), Price1(4)
-        //Remember to skip first line
-        Log.i("DB Handler: ", "We are here!");
+        try {
+            db.beginTransaction();
+            //clear table
+            clearDatabase();
+            String filename = "SCINVT.dbf";
+            final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsoluteFile(), filename);
+
+            FileInputStream in = new FileInputStream(file);
+            DBFReader reader = new DBFReader(in);
+            int fields = reader.getFieldCount();
+
+            for (int i = 0; i < fields; i++) {
+                DBFField field = reader.getField(i);
+            }
+
+            Object []rowObjects;
+
+            while ((rowObjects = reader.nextRecord()) != null){
+                //Log.i("DB Handler", rowObjects[0].toString().trim() + ", " + rowObjects[3].toString().trim() + ", " + rowObjects[4].toString().trim());
+                ContentValues values = new ContentValues();
+                values.put(KEY_ITEMNO, rowObjects[0].toString().trim());
+                values.put(KEY_DESC, rowObjects[3].toString().trim());
+                values.put(KEY_PRICE, rowObjects[4].toString().trim());
+
+                db.insertOrThrow(TABLE_INVENTORY, KEY_ITEMNO, values);
+            }
+            db.setTransactionSuccessful();
+            in.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
+
+        //TODO: Load Inventory Exchange
+        try {
+            db.beginTransaction();
+            String filename = "STKADD.dbf";
+            final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsoluteFile(), filename);
+
+            FileInputStream in = new FileInputStream(file);
+            DBFReader reader = new DBFReader(in);
+            int fields = reader.getFieldCount();
+
+            for (int i = 0; i < fields; i++) {
+                DBFField field = reader.getField(i);
+            }
+
+            Object []rowObjects;
+
+            while ((rowObjects = reader.nextRecord()) != null){
+                //Log.i("DB Handler", rowObjects[0].toString().trim() + ", " + rowObjects[2].toString().trim() + ", " + rowObjects[10].toString().trim() + ", " + rowObjects[11].toString().trim());
+
+                ContentValues values = new ContentValues();
+                values.put(KEY_ITEMNO, rowObjects[0].toString().trim());
+                String s = rowObjects[2].toString().trim();
+                int index = s.indexOf(".");
+                if (index > 10) { index = 0; }
+                String d = s.substring(0,index+3);
+                values.put(KEY_VENDOR, d);
+                values.put(KEY_RECEIVED, rowObjects[10].toString().trim());
+                String[] date = rowObjects[11].toString().split(" ");
+                s = Arrays.asList(months).lastIndexOf(date[1])
+                        + "/" + date[2]
+                        + "/" + date[5].substring(2);
+                values.put(KEY_DATE, s);
+                //values.put(KEY_DATE, rowObjects[11].toString().trim());
+                db.insertOrThrow(TABLE_LOG, KEY_ITEMNO, values);
+            }
+            db.setTransactionSuccessful();
+            in.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+            //checkLogData();
+        }
+
+        /*
         try{
             CSVReader reader = new CSVReader(new FileReader(file), ',');
             List<String[]> allRows = reader.readAll();
@@ -152,7 +273,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db.endTransaction();
             //checkData();
         }
-
+        */
     }
 
     public void checkData() {
@@ -161,7 +282,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        DataItem di = null;
         if (cursor.moveToFirst()) {
             do {
                 Log.i("DB Handler", cursor.getString(1) + ", " + cursor.getString(2) + ", " + cursor.getString(3));
@@ -170,4 +290,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
     }
 
+
+    public void checkLogData() {
+        Log.i("DB Handler", "We are here!");
+        Log.i("DB Handler", getItemLogCount() + " Items Found");
+        String selectQuery = "SELECT * FROM " + TABLE_LOG;// + " ORDER BY " + KEY_QTY;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Log.i("DB Handler", cursor.getString(1) + ", " + cursor.getString(2) + ", " + cursor.getString(3) + ", " + cursor.getString(4));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+    }
 }

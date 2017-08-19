@@ -4,6 +4,10 @@
         android:id="@+id/options_main_purge"
         android:title="@string/str_button_purge"/>
     <item
+        android:id="@+id/options_main_master"
+        android:title="@string/str_button_master"
+        android:checkable="true"/>
+    <item
         android:id="@+id/options_main_help"
         android:title="@string/str_button_help"/>
 </menu>

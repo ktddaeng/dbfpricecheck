@@ -2,6 +2,7 @@ package com.example.gadau.pricecheck;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -14,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -43,11 +45,13 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private MainAdapter mAdapter;
     private AlertDialog progressDialog;
     private AlertDialog.Builder progressBuild;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        preferences = getSharedPreferences(Contants.SETTINGS, MODE_PRIVATE);
 
         listOfData = new ArrayList<>();
         listOfData.add(new MenuOption(R.string.header1, R.string.desc1, R.color.colorAccent2));
@@ -112,9 +116,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO: Do something with inputted number
                         identifyID(inID.getText().toString());
-                        //Toast.makeText(MainActivity.this, inID.getText().toString(), Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     }
                 })
@@ -148,8 +150,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             if (result.getContents() == null) {
                 Toast.makeText(this, "Result Not Found", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Found: " + result.getContents(), Toast.LENGTH_SHORT).show();
-                //TODO: send results somewhere
                 identifyID(result.getContents());
             }
         } else {
@@ -169,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private void launchInfoPage(DataItem di){
         Intent i = new Intent(this, InformationActivity.class);
         i.putExtra(Contants.EXTRA_DATAITEM, di);
+        i.putExtra(Contants.ISMASTER, preferences.getBoolean(Contants.ISMASTER, true));
         startActivity(i);
     }
 
@@ -181,7 +182,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO: Resync database with attached dbf file
                         canImportPlease();
                         dialog.dismiss();
                     }
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
         @Override
         protected Void doInBackground(Void... params) {
-            db.importDatabase();
+            db.importDatabase(preferences.getBoolean(Contants.ISMASTER, true));
             return null;
         }
 
@@ -230,17 +230,20 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         }
     }
 
-
     public void showMenu(View v){
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_options, popup.getMenu());
+
         popup.show();
+        Log.i("Main", "Admin Mode " + preferences.getBoolean(Contants.ISMASTER, true));
+        popup.getMenu().getItem(1).setChecked(preferences.getBoolean(Contants.ISMASTER, true));
         popup.setOnMenuItemClickListener(this);
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
+        final MenuItem it = item;
         switch(item.getItemId()) {
             case R.id.options_main_help:
                 Toast.makeText(this, "Pulling help", Toast.LENGTH_SHORT).show();
@@ -248,9 +251,53 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             case R.id.options_main_purge:
                 onPurge();
                 return true;
-            default:
-                return false;
+            case R.id.options_main_master:
+                if (!item.isChecked()){
+                    //Set permission for admin mode
+                    final AlertDialog.Builder alertA = new AlertDialog.Builder(this);
+                    View subView = getLayoutInflater().inflate(R.layout.fragment_pass, null);
+                    alertA.setView(subView);
+                    final EditText inPass = (EditText) subView.findViewById(R.id.input_pass);
+                    inPass.requestFocus();
+                    alertA.setTitle("Enter PIN")
+                            .setCancelable(true)
+                            .setPositiveButton("Enter", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (inPass.getText().toString().equals(Contants.PINPASS)){
+                                        toggleButton(it);
+                                        Toast.makeText(MainActivity.this, "Set Admin Mode", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        dialog.dismiss();
+                                        Toast.makeText(MainActivity.this, "Password Not Accepted", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    Toast.makeText(MainActivity.this, "Action Canceled", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    AlertDialog alertDialog = alertA.create();
+                    alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                    alertDialog.show();
+                } else {
+                    //set regular mode
+                    toggleButton(item);
+                    Toast.makeText(this, "Set Regular Mode", Toast.LENGTH_SHORT).show();
+                }
+                return true;
         }
+        return false;
+    }
+
+    private void toggleButton(MenuItem mi){
+        mi.setChecked(!(mi.isChecked()));
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.putBoolean(Contants.ISMASTER, mi.isChecked());
+        edit.commit();
     }
 
     private void onPurge() {
