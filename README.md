@@ -40,7 +40,7 @@ Users can use Admin Mode through the context menu in the main menu, but only if 
 |---|---|---|
 |<img src="/screenshots/Screenshot_20170831-133851.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170818-173250.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170831-134049.png" width="250px" height="auto">|
 
-A user with Admin priveleges will notice a change in the Information Page after unlocking Admin Mode. Admins can view the order history of an item, usually seeing the last five shipments and unit prices. In the top right corner of the information page is a button that allows admins to mark items as favorites, meaning that the item will be saved onto the Restock Log.
+A user with Admin privileges will notice a change in the Information Page after unlocking Admin Mode. Admins can view the order history of an item, usually seeing the last five shipments and unit prices. In the top right corner of the information page is a button that allows admins to mark items as favorites, meaning that the item will be saved onto the Restock Log.
 
 ### Restock Log (Admin Mode Restricted)
 This page compiles the full list of items that an admin has favorited for restocking. This list is automatically ordered by Item ID for easy navigation. Clicking on an item on the list will bring up the item's information page, the same page as when such an item is scanned in. Items can be easily deleted off the list by swiping to the right, and the list can be refreshed by swiping down.
