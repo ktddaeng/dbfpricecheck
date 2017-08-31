@@ -61,8 +61,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
         setUpToolbar();
         setUpRecycler();
-        
-        //TODO: setup database
+
         dB = DatabaseHandler.getInstance(this);
 
         if (savedInstanceState != null){

@@ -98,7 +98,6 @@ public class InformationActivity extends SwipeDismissBaseActivity {
 
     private void onRestock(String id){
         isActivated = !isActivated;
-        //TODO: Make a button in the top right corner. When toggled on, mark item for restocking
 
         if (isActivated){
             animationView.playAnimation();

@@ -292,7 +292,6 @@ public class DBFReader extends DBFBase {
 						break;
 	
 					case 'M':
-						// TODO Later
 						recordObjects[i] = new String( "null");
 						break;
 

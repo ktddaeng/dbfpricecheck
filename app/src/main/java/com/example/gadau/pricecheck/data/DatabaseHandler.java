@@ -172,8 +172,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void addRestockItem(String id) {
-        //TODO: Given ID, add id to the restock table
-        //Unverified
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -184,8 +182,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void deleteRestockItem(String id) {
-        //TODO: Given ID, remove id from restock table
-        //Unverified
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_RESTOCK, KEY_ITEMNO + " = ?",
                 new String[] {id});
@@ -207,8 +203,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public List<DataItem> getRestockLog() {
-        //TODO: Return list of items in restock table
-        //unverfied
         List<DataItem> listItems = new ArrayList<>();
         Cursor cursor = getRestockLogCursor();
 
@@ -227,9 +221,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public Cursor getRestockLogCursor() {
-        //TODO: Return cursor query of restock table items
-        //unverified
-        //TODO: Fix Query
         String selectRestockQuery = "SELECT " + KEY_ITEMNO +  " FROM " + TABLE_RESTOCK;
         String selectQuery = "SELECT * FROM " + TABLE_INVENTORY
                 + " WHERE " + KEY_ITEMNO + " IN ("
@@ -247,8 +238,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void exportRestockTable(){
-        //TODO: export restock table into a local CSV file
-        //unverified
         SimpleDateFormat df = new SimpleDateFormat("yyyy_MM_dd__HH_mm",
                 Locale.getDefault());
         String date = df.format(new Date());
