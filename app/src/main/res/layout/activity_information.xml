@@ -6,35 +6,57 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorPrimary"
+    android:gravity="center"
     android:padding="16dp"
     tools:context="com.example.gadau.pricecheck.InformationActivity">
-
-    <ImageView
-        android:id="@+id/button_cancel"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/ic_cancel_white_36dp"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="left"
         android:orientation="horizontal">
-        <TextView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="34sp"
-            android:layout_marginTop="34dp"
-            android:textColor="@color/colorMenuText"
-            android:text="#"/>
-        <TextView
-            android:id="@+id/info_id"
-            android:layout_width="match_parent"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/button_cancel"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_cancel_white_36dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="left">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="34sp"
+                    android:textColor="@color/colorMenuText"
+                    android:text="#"/>
+                <TextView
+                    android:id="@+id/info_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="34sp"
+                    android:textColor="@color/colorMenuText"
+                    tools:text="@string/sample_id"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="34sp"
-            android:layout_marginTop="34dp"
-            android:textColor="@color/colorMenuText"
-            tools:text="@string/sample_id"/>
+            android:layout_gravity="right">
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animation_view"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                app:lottie_scale=".3"
+                android:visibility="gone"
+                app:lottie_fileName="save.json"/>
+        </LinearLayout>
     </LinearLayout>
     <TextView
         android:id="@+id/info_desc"
@@ -44,7 +66,7 @@
         android:textColor="@color/colorMenuText"
         tools:text="@string/sample_desc"/>
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="top">

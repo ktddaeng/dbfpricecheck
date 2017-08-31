@@ -1,21 +1,24 @@
 <resources>
     <string name="app_name">Price Check</string>
 
-    <string name="dialog_id">Please type the full ID.</string>
+    <string name="dialog_id">Please type or scan in the full ID.</string>
     <string name="dialog_syncwarn">Some data may be erased once synced. Are you sure you wish to proceed?</string>
 
     <string name="header1">Scan ID</string>
     <string name="header2">Manual Search</string>
     <string name="header3">Sync Database</string>
-    <string name="desc1">Use the built-in barcode scanner to identify or add new items</string>
-    <string name="desc2">Find item by ID using keyboard input</string>
+    <string name="header4">Restock Log</string>
+    <string name="desc1">Use the built-in barcode scanner camera to identify items</string>
+    <string name="desc2">Find item by ID using keyboard input or Bluetooth scanner.</string>
     <string name="desc3">Update the internal database with newly loaded source file</string>
+    <string name="desc4">(Admin Only) View a list of all items in need of restocking.</string>
 
     <string name="sample_id">4005808801022</string>
     <string name="sample_desc">COLORBOOK 12PK   </string>
     <string name="sample_dollarsign">$</string>
     <string name="sample_dollars">123</string>
     <string name="sample_cents">99</string>
+    <string name="sample_price">$123.99</string>
 
     <string name="sample_record_vendor">JC1.50</string>
     <string name="sample_record_receive">99</string>
@@ -26,4 +29,8 @@
     <string name="str_button_purge">Purge</string>
     <string name="str_button_master">Admin Mode</string>
     <string name="str_button_help">Help</string>
+    <string name="str_button_export">Export</string>
+
+    <string name="str_label_id">ID No.</string>
+    <string name="str_label_desc">Description</string>
 </resources>

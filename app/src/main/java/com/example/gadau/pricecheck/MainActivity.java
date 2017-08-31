@@ -55,8 +55,9 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
         listOfData = new ArrayList<>();
         listOfData.add(new MenuOption(R.string.header1, R.string.desc1, R.color.colorAccent2));
-        listOfData.add(new MenuOption(R.string.header2, R.string.desc2, R.color.colorAccent));
-        listOfData.add(new MenuOption(R.string.header3, R.string.desc3, R.color.colorPrimary));
+        listOfData.add(new MenuOption(R.string.header2, R.string.desc2, R.color.colorPrimary));
+        listOfData.add(new MenuOption(R.string.header3, R.string.desc3, R.color.colorAccent));
+        listOfData.add(new MenuOption(R.string.header4, R.string.desc4, R.color.colorPrimaryDark));
 
         setUpToolbar();
         setUpRecycler();
@@ -99,6 +100,9 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 break;
             case R.string.header3:
                 syncDatabase();
+                break;
+            case R.string.header4:
+                launchRestockPage();
                 break;
         }
     }
@@ -173,6 +177,16 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         startActivity(i);
     }
 
+    private void launchRestockPage(){
+        if (!preferences.getBoolean(Contants.ISMASTER, true)){
+            Toast.makeText(this, "Acess Denied. Admin Only.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //Toast.makeText(this, "Under Construction", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(this, RestockActivity.class);
+        startActivity(i);
+    }
+
     private void syncDatabase(){
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
@@ -204,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     private class importHandler extends AsyncTask<Void, Void, Void> {
         DatabaseHandler db = DatabaseHandler.getInstance(MainActivity.this);
+        private String s;
 
         @Override
         protected void onPreExecute() {
@@ -218,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
         @Override
         protected Void doInBackground(Void... params) {
-            db.importDatabase(preferences.getBoolean(Contants.ISMASTER, true));
+            s = db.importDatabase(preferences.getBoolean(Contants.ISMASTER, true));
             return null;
         }
 
@@ -226,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             progressDialog.dismiss();
-            Toast.makeText(MainActivity.this, "Database Successfully Synced!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
         }
     }
 
