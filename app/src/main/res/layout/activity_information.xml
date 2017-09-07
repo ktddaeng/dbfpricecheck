@@ -49,13 +49,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right">
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/animation_view"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                app:lottie_scale=".3"
-                android:visibility="gone"
-                app:lottie_fileName="save.json"/>
+            <ToggleButton
+                android:id="@+id/button_restock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
     <TextView

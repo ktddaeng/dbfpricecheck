@@ -154,7 +154,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 new String[]{ KEY_ID, KEY_ITEMNO, KEY_VENDOR, KEY_RECEIVED, KEY_DATE},
                 KEY_ITEMNO + "=?",
                 new String[]{id},
-                null, null, KEY_DATE + " ASC", "5");
+                null, null, KEY_ID + " DESC", "5");
 
         LogItem di = null;
         if (cursor.moveToFirst()) {
@@ -296,7 +296,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db.beginTransaction();
             //clear table
             clearDatabase();
-            String filename = "SCINVT_SHORT.dbf";
+            String filename = "SCINVT.DBF";
             final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsoluteFile(), filename);
             if (!file.exists()){
                 return "Cannot Find SCINVT.dbf";
@@ -316,8 +316,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 //Log.i("DB Handler", rowObjects[0].toString().trim() + ", " + rowObjects[3].toString().trim() + ", " + rowObjects[4].toString().trim());
                 ContentValues values = new ContentValues();
                 values.put(KEY_ITEMNO, rowObjects[0].toString().trim());
-                values.put(KEY_DESC, rowObjects[1].toString().trim());
-                values.put(KEY_PRICE, rowObjects[2].toString().trim());
+                values.put(KEY_DESC, rowObjects[3].toString().trim());
+                values.put(KEY_PRICE, rowObjects[4].toString().trim());
 
                 db.insertOrThrow(TABLE_INVENTORY, KEY_ITEMNO, values);
             }
@@ -331,7 +331,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         try {
             db.beginTransaction();
-            String filename = "STKADD.dbf";
+            String filename = "STKADD.DBF";
             final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsoluteFile(), filename);
             if (!file.exists()){
                 return "Cannot Find STKADD.dbf";

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.gadau.pricecheck.data.Contants;
@@ -27,7 +28,8 @@ public class InformationActivity extends SwipeDismissBaseActivity {
     private List<LogItem> listOfData;
     private LogAdapter mAdapter;
     private boolean isActivated;
-    private LottieAnimationView animationView;
+    //private LottieAnimationView animationView;
+    private ToggleButton toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,26 @@ public class InformationActivity extends SwipeDismissBaseActivity {
 
     private void setUpRestock(String id){
         final String identification = id;
+        toggle = (ToggleButton) findViewById(R.id.button_restock);
+        toggle.setVisibility(View.VISIBLE);
+        if (dB.isOnRestock(id)){
+            isActivated = true;
+            toggle.setChecked(true);
+        } else {
+            isActivated = false;
+            toggle.setChecked(false);
+        }
+        toggle.setText("None");
+        toggle.setTextOn("Rstk");
+        toggle.setTextOff("None");
+        toggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onRestock(identification);
+            }
+        });
+
+        /*
         animationView = (LottieAnimationView) findViewById(R.id.animation_view);
         animationView.setVisibility(View.VISIBLE);
         if (dB.isOnRestock(id)){
@@ -94,17 +116,18 @@ public class InformationActivity extends SwipeDismissBaseActivity {
                 onRestock(identification);
             }
         });
+        */
     }
 
     private void onRestock(String id){
         isActivated = !isActivated;
 
         if (isActivated){
-            animationView.playAnimation();
+            toggle.setChecked(true);
             dB.addRestockItem(id);
             Toast.makeText(this, "Restock Set", Toast.LENGTH_SHORT).show();
         } else {
-            animationView.setProgress(0);
+            toggle.setChecked(false);
             dB.deleteRestockItem(id);
             Toast.makeText(this, "No Restock", Toast.LENGTH_SHORT).show();
         }
