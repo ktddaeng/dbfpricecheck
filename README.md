@@ -9,7 +9,7 @@ Price Check is an Android app that allows users to check the price of items by e
 This app was made as a management tool for a local gift shop & convenience store. The store owners use a very old FoxPro inventory management system, so marking items for restocking and checking the price of an item is a time consuming process.
 
 ## What's New
-* Added a Restocking Log: Mark items as a favorite and put them on a log for restocking. The log can be exported for printing.
+* Bluetooth Scanner Support
 
 ## Prerequisites
 * Android SDK 25 (Minimum SDK 19)
@@ -26,6 +26,8 @@ This app gets information from databases with a DBF extension. The columns must 
 
 ### Scanning Items
 After selecting Search & Scan in the main menu, you can choose to enter in a barcode manually, or scan the item using your camera. This app uses the [ZXing Barcode Scanning Library](https://github.com/zxing/zxing). Users can then see a page containing the description and price of an item as stated in the inventory.
+
+A Bluetooth Scanner as HID Input can be used to scan items as well. By selecting Manual Search, the app will tell the user if it has detected the scanner. The app will react immediately to the scanner's input without requiring the user to select OK in the dialog.
 
 *Troubleshooting: If the item could not be found in the database by camera scanning or manual input, it could be because the item is registered with 10 digits of its ID rather than the full 12 digits. Try manually inputting the barcode ID again, this time without the first or last digits. And if that doesn't work, it could be because the inventory is out of date, or the item truly does not exist in the database.*
 
