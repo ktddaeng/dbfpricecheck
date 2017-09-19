@@ -65,5 +65,5 @@ This recently added feature allows a user with admin priveleges to add items to 
 The exclusive New Items list can be accessed through the "Items to Add" option in the main menu. Like the Restock Log, an item's information page can be accessed by touching the item, and an item can be deleted by swiping the item to the left. The information page will be colored red instead of green to denote that the item has not been registered in the main database. This table can also be exported into a CSV file using the menu in the top right corner. The created CSV file will be saved in the Downloads file and can be used to import into the DBF program of the user's choice.
 
 |Items to Add List|Deleting a New Item|Item Information Page (New Item)|
-|---|---|
+|---|---|---|
 |<img src="/screenshots/Screenshot_20170918-213648.png" width="250px" height="auto">|<img src="/screenshots/ezgif-1-255da2d71b.gif" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170918-212202.png" width="250px" height="auto">|
