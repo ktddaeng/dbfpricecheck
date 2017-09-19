@@ -14,4 +14,5 @@ public class Contants {
     public static final String ISMASTER = "ISMASTER";
     public static final String PINPASS = "1996";
     public static final String EXTRA_DATAITEM = "EXTRA_DATAITEM";
+    public static final String EXTRA_ISREALDATA = "EXTRA_ISREALDATA";
 }

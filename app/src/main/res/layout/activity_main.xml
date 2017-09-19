@@ -13,6 +13,7 @@
         android:layout_height="56dp"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
+        android:layout_marginBottom="8dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
         <RelativeLayout
@@ -35,6 +36,7 @@
         android:id="@+id/rec_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/fragment_cardview"/>
+        tools:listitem="@layout/fragment_cardview"
+        />
 
 </LinearLayout>

@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.example.gadau.pricecheck.R;
 import com.example.gadau.pricecheck.data.DataItem;
-import com.example.gadau.pricecheck.data.LogItem;
+import com.example.gadau.pricecheck.data.RestockItem;
 
 import java.util.List;
 
@@ -17,10 +17,10 @@ import java.util.List;
  */
 
 public class RestockAdapter extends RecyclerView.Adapter<RestockAdapter.ResListItem> {
-    private List<DataItem> listOfData;
+    private List<RestockItem> listOfData;
     private ItemClickListener clickListener;
 
-    public RestockAdapter(List<DataItem> list) {
+    public RestockAdapter(List<RestockItem> list) {
         listOfData = list;
     }
 
@@ -38,6 +38,9 @@ public class RestockAdapter extends RecyclerView.Adapter<RestockAdapter.ResListI
             s = s.substring(0,11);
         }
         holder.iDesc.setText(s);
+        holder.iLoDesc.setText(listOfData.get(position).getLo_desc());
+        holder.iLoRec.setText(listOfData.get(position).getLo_qty());
+        holder.iLoDate.setText(listOfData.get(position).getLo_date());
     }
 
     public void setClickListener(ItemClickListener clickListener){
@@ -56,10 +59,10 @@ public class RestockAdapter extends RecyclerView.Adapter<RestockAdapter.ResListI
     }
 
     public DataItem getDataItem(int position){
-        return listOfData.get(position);
+        return listOfData.get(position).getDataItem();
     }
 
-    public void updateData(List<DataItem> list){
+    public void updateData(List<RestockItem> list){
         listOfData.clear();
         listOfData.addAll(list);
         notifyDataSetChanged();
@@ -68,12 +71,18 @@ public class RestockAdapter extends RecyclerView.Adapter<RestockAdapter.ResListI
     public class ResListItem extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView iID;
         public TextView iDesc;
+        public TextView iLoDesc;
+        public TextView iLoRec;
+        public TextView iLoDate;
 
         public ResListItem(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             iID = (TextView) itemView.findViewById(R.id.restock_id);
             iDesc = (TextView) itemView.findViewById(R.id.restock_desc);
+            iLoDesc = (TextView) itemView.findViewById(R.id.restock_lo_1);
+            iLoRec = (TextView) itemView.findViewById(R.id.restock_lo_2);
+            iLoDate = (TextView) itemView.findViewById(R.id.restock_lo_3);
         }
 
         @Override

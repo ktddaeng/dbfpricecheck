@@ -1,6 +1,7 @@
 package com.example.gadau.pricecheck;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -42,7 +43,14 @@ public class InformationActivity extends SwipeDismissBaseActivity {
         TextView infoDollars = (TextView) findViewById(R.id.info_dollars);
         TextView infoCents = (TextView) findViewById(R.id.info_cents);
         ImageView cancelButton = (ImageView) findViewById(R.id.button_cancel);
-
+        View root = findViewById(R.id.info_main);
+        if (getIntent().getExtras().getBoolean(Contants.EXTRA_ISREALDATA)){
+            //change background to deep red
+            root.setBackgroundResource(R.color.colorPrimary);
+        } else {
+            Toast.makeText(this, "Item needs to be registered in database!", Toast.LENGTH_SHORT).show();
+            root.setBackgroundResource(R.color.colorRedBG);
+        }
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

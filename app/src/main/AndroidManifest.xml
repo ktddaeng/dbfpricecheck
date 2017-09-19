@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gadau.pricecheck">
-    <meta-data android:name="com.samsung.android.sdk.multiwindow.enable"
-        android:value="true"/>
+
+    <meta-data
+        android:name="com.samsung.android.sdk.multiwindow.enable"
+        android:value="true" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -28,7 +30,8 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".InformationActivity" />
         <activity android:name=".logic.SwipeDismissBaseActivity" />
-        <activity android:name=".RestockActivity"></activity>
+        <activity android:name=".RestockActivity" />
+        <activity android:name=".UnfinishActivity"></activity>
     </application>
 
 </manifest>

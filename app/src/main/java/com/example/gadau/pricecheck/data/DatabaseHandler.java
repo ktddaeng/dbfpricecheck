@@ -34,13 +34,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String TABLE_INVENTORY = "inventory";
     public static final String TABLE_LOG = "shiplog";
     public static final String TABLE_RESTOCK = "restock";
+    public static final String TABLE_NEWITEM = "newitem";
     public static final int DATABASE_VERSION = 1;
     private String[] months = {"Month", "Jan", "Feb", "Mar", "Apr",
                     "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
     private static final String KEY_ID = "inventory_id";
     private static final String KEY_RESTOCK_ID = "restock_id";
-    private static final String KEY_ITEMNO = "iventory_barcode";
+    private static final String KEY_ITEMNO = "inventory_barcode";
     private static final String KEY_DESC = "inventory_desc";
     private static final String KEY_PRICE = "inventory_price";
     private static final String KEY_VENDOR = "log_vendor";
@@ -73,12 +74,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_LOG);
 
         onCreateRestock(db);
+        onCreateNewItem(db);
     }
 
     public void onCreateRestock(SQLiteDatabase db) {
         String CREATE_RESTOCK = "CREATE TABLE " +
                 TABLE_RESTOCK + "(" + KEY_RESTOCK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + KEY_ITEMNO + " TEXT)";
+                + KEY_ITEMNO + " TEXT, " + KEY_DESC + " TEXT, " + KEY_PRICE + " TEXT)";
+        db.execSQL(CREATE_RESTOCK);
+    }
+
+    public void onCreateNewItem(SQLiteDatabase db) {
+        String CREATE_RESTOCK = "CREATE TABLE " +
+                TABLE_NEWITEM + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + KEY_ITEMNO + " TEXT, " + KEY_DESC + " TEXT, " + KEY_PRICE + " TEXT)";
         db.execSQL(CREATE_RESTOCK);
     }
 
@@ -117,7 +126,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return null;
     }
 
-    private void addItem(DataItem item) {
+    public DataItem getNewItembyID(String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NEWITEM,
+                new String[]{KEY_ID, KEY_ITEMNO, KEY_DESC, KEY_PRICE},
+                KEY_ITEMNO + "=?",
+                new String[]{id},
+                null, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            DataItem item = new DataItem(cursor.getString(1), cursor.getString(2),
+                    cursor.getString(3));
+            return item;
+        }
+        return null;
+    }
+
+    public void addNewItem(DataItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -125,7 +149,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_DESC, item.getDesc());
         values.put(KEY_PRICE, item.getPrice());
 
-        db.insert(TABLE_INVENTORY, KEY_ITEMNO, values);
+        db.insert(TABLE_NEWITEM, KEY_ITEMNO, values);
+        db.close();
+    }
+
+    public void deleteNewItem(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NEWITEM, KEY_ITEMNO + " = ?",
+                new String[] {id});
         db.close();
     }
 
@@ -145,6 +176,70 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         int ct = cursor.getCount();
         cursor.close();
         return ct;
+    }
+
+    public Cursor getUnfinishCursor(){
+        String selectQuery = "SELECT * FROM " + TABLE_NEWITEM
+                + " ORDER BY " + KEY_ITEMNO;
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        return cursor;
+    }
+
+    public List<DataItem> getListOfDataItem(){
+        List<DataItem> listItems = new ArrayList<>();
+        Cursor cursor = getUnfinishCursor();
+
+        DataItem di;
+        if (cursor.moveToFirst()) {
+            do {
+                di = new DataItem();
+                di.setID(cursor.getString(1));
+                di.setDesc(cursor.getString(2));
+                di.setPrice(cursor.getString(3));
+                listItems.add(di);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return listItems;
+    }
+
+    public void clearNewItemTable() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWITEM);
+        onCreateNewItem(db);
+    }
+
+    public void exportUnfinishTable(){
+        SimpleDateFormat df = new SimpleDateFormat("yyyy_MM_dd__HH_mm",
+                Locale.getDefault());
+        String date = df.format(new Date());
+        Cursor cursor = getUnfinishCursor();
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsoluteFile();
+        String filename = "NewItemTable_"+ date +".csv";
+
+        //TODO: account for gaps and unfilled spaces in the original form
+        try {
+            File saveFile = new File(path, filename);
+            FileWriter fw = new FileWriter(saveFile);
+
+            BufferedWriter bw = new BufferedWriter(fw);
+            int rowCount = cursor.getCount();
+            int colCount = cursor.getColumnCount();
+            if (rowCount > 0) {
+                cursor.moveToFirst();
+                for (int i = 0; i < rowCount; i++) {
+                    cursor.moveToPosition(i);
+                    bw.write(cursor.getString(1) + ",,,");
+                    bw.write(cursor.getString(2) + "," + cursor.getString(3));
+                    bw.newLine();
+                }
+                bw.flush();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public List<LogItem> getListofData(String id) {
@@ -202,17 +297,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
     }
 
-    public List<DataItem> getRestockLog() {
-        List<DataItem> listItems = new ArrayList<>();
+    public List<RestockItem> getRestockLog() {
+        List<RestockItem> listItems = new ArrayList<>();
         Cursor cursor = getRestockLogCursor();
 
-        DataItem di = null;
+        RestockItem di = null;
         if (cursor.moveToFirst()) {
             do {
-                di = new DataItem();
+                di = new RestockItem();
                 di.setID(cursor.getString(1));
                 di.setDesc(cursor.getString(2));
                 di.setPrice(cursor.getString(3));
+                LogItem li = getListofData(di.getID()).get(0);
+                di.setLo_desc(li.getVendor());
+                di.setLo_qty(li.getReceive());
+                di.setLo_date(li.getDate());
                 listItems.add(di);
             } while (cursor.moveToNext());
             cursor.close();
@@ -284,12 +383,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_INVENTORY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOG);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RESTOCK);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWITEM);
         onCreate(db);
     }
 
     public String importDatabase(boolean master) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         //String filename = "SCINVT.csv";
         //We need the following columns: ID(0), Desc(3), Price1(4)
         try {
@@ -391,7 +490,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 values.put(KEY_ITEMNO, row[0]);
                 values.put(KEY_DESC, row[3]);
                 values.put(KEY_PRICE, row[4]);
-
                 db.insert(TABLE_INVENTORY, KEY_ITEMNO, values);
             }
             db.setTransactionSuccessful();

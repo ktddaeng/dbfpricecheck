@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         listOfData.add(new MenuOption(R.string.header2, R.string.desc2, R.color.colorPrimary));
         listOfData.add(new MenuOption(R.string.header3, R.string.desc3, R.color.colorAccent));
         listOfData.add(new MenuOption(R.string.header4, R.string.desc4, R.color.colorPrimaryDark));
+        listOfData.add(new MenuOption(R.string.header5, R.string.desc5, R.color.colorRedBG));
 
         setUpToolbar();
         setUpRecycler();
@@ -105,6 +106,9 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 break;
             case R.string.header4:
                 launchRestockPage();
+                break;
+            case R.string.header5:
+                launchNewItemPage();
                 break;
         }
     }
@@ -187,18 +191,100 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     private void identifyID (String gottenId) {
         DataItem di = dB.getItemByID(gottenId);
+        Log.i("Main", "Status" + (dB.getItemCount()));
         if (di != null) {
-            launchInfoPage(di);
+            launchInfoPage(di, true);
         } else {
+            di = dB.getNewItembyID(gottenId);
+            if (di != null && preferences.getBoolean(Contants.ISMASTER, true)) {
+                launchInfoPage(di, false);
+                return;
+            } else if (preferences.getBoolean(Contants.ISMASTER, true)){
+                wouldLikeNewItem(gottenId);
+                return;
+            }
             Toast.makeText(MainActivity.this, "Could not find item", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void launchInfoPage(DataItem di){
+    private void launchInfoPage(DataItem di, boolean isRealData){
         Intent i = new Intent(this, InformationActivity.class);
         i.putExtra(Contants.EXTRA_DATAITEM, di);
         i.putExtra(Contants.ISMASTER, preferences.getBoolean(Contants.ISMASTER, true));
+        if (isRealData){
+            i.putExtra(Contants.EXTRA_ISREALDATA, true);
+        } else {
+            i.putExtra(Contants.EXTRA_ISREALDATA, false);
+        }
         startActivity(i);
+    }
+
+    private void wouldLikeNewItem(String gottenId){
+        AlertDialog.Builder alertA = new AlertDialog.Builder(this);
+        final String id = gottenId;
+        alertA.setTitle("Found: " + id);
+        //should make icons to follow the different options.
+        alertA
+                .setMessage("This item doesn't exist in the database. Would you like to add this item?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which){
+                        //Go Edit Data
+                        dialog.dismiss();
+                        addNewItemToLog(id);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Cancel the dialog
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog alertDialog = alertA.create();
+        alertDialog.show();
+    }
+
+    private void addNewItemToLog(String gottenId){
+        final String id = gottenId;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter Item Information");
+        View subView = getLayoutInflater().inflate(R.layout.fragment_edit_newitem, null);
+        final EditText inID = (EditText) subView.findViewById(R.id.input_dialog_id);
+        final EditText inDesc = (EditText) subView.findViewById(R.id.input_dialog_desc);
+        final EditText inPrice = (EditText) subView.findViewById(R.id.input_dialog_price);
+        builder.setView(subView);
+        inID.setText(id);
+        inDesc.requestFocus();
+
+        builder
+                .setCancelable(true)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //TODO: create DataItem to be added
+                        DataItem di = new DataItem();
+                        di.setID(inID.getText().toString());
+                        String s = inDesc.getText().toString();
+                        if (inDesc.getText().length() > 24){
+                            s = s.substring(0,25);
+                        }
+                        di.setDesc(s);
+                        di.setPrice(inPrice.getText().toString());
+                        dB.addNewItem(di);
+                        Toast.makeText(MainActivity.this, "Item has been added", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Toast.makeText(MainActivity.this, "Entry Canceled", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        final AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void launchRestockPage(){
@@ -206,8 +292,16 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             Toast.makeText(this, "Acess Denied. Admin Only.", Toast.LENGTH_SHORT).show();
             return;
         }
-        //Toast.makeText(this, "Under Construction", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(this, RestockActivity.class);
+        startActivity(i);
+    }
+
+    private void launchNewItemPage(){
+        if (!preferences.getBoolean(Contants.ISMASTER, true)){
+            Toast.makeText(this, "Acess Denied. Admin Only.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent i = new Intent(this, UnfinishActivity.class);
         startActivity(i);
     }
 
@@ -285,7 +379,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         final MenuItem it = item;
         switch(item.getItemId()) {
             case R.id.options_main_help:
-                Toast.makeText(this, "Pulling help", Toast.LENGTH_SHORT).show();
+                //TODO: Help page
+                Toast.makeText(this, "Under Construction", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.options_main_purge:
                 onPurge();

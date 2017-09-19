@@ -26,24 +26,18 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.gadau.pricecheck.R;
 import com.example.gadau.pricecheck.data.Contants;
-import com.example.gadau.pricecheck.data.DataItem;
 import com.example.gadau.pricecheck.data.DatabaseHandler;
 import com.example.gadau.pricecheck.logic.ItemClickListener;
-import com.example.gadau.pricecheck.logic.LogAdapter;
-import com.example.gadau.pricecheck.logic.RestockAdapter;
+import com.example.gadau.pricecheck.logic.NewItemAdapter;
 
-import java.util.List;
-
-public class RestockActivity extends AppCompatActivity
-    implements ItemClickListener, PopupMenu.OnMenuItemClickListener {
+public class UnfinishActivity extends AppCompatActivity
+        implements ItemClickListener, PopupMenu.OnMenuItemClickListener {
     private DatabaseHandler dB;
-    private RestockAdapter mAdapter;
+    private NewItemAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout swiperRefresh;
     private SharedPreferences preferences;
@@ -52,7 +46,7 @@ public class RestockActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restock);
+        setContentView(R.layout.activity_unfinish);
         preferences = getSharedPreferences(Contants.SETTINGS, MODE_PRIVATE);
 
         setUpToolbar();
@@ -61,7 +55,7 @@ public class RestockActivity extends AppCompatActivity
     }
 
     private void setUpToolbar(){
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_sort);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_unfinish);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitleTextColor(Color.WHITE);
@@ -71,23 +65,32 @@ public class RestockActivity extends AppCompatActivity
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { RestockActivity.this.finish(); }
+            public void onClick(View v) { UnfinishActivity.this.finish(); }
         });
     }
 
     private void setUpRecycler(){
         dB = DatabaseHandler.getInstance(this);
-        mRecyclerView = (RecyclerView) findViewById(R.id.rec_restock);
+        mRecyclerView = (RecyclerView) findViewById(R.id.rec_unfinish);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mAdapter = new RestockAdapter(dB.getRestockLog());
+        mAdapter = new NewItemAdapter(dB.getListOfDataItem());
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setClickListener(this);
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         );
         setUpSwap();
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        Intent intent = new Intent(this, InformationActivity.class);
+        intent.putExtra(Contants.EXTRA_DATAITEM, mAdapter.getDataItem(position));
+        intent.putExtra(Contants.ISMASTER, preferences.getBoolean(Contants.ISMASTER, true));
+        intent.putExtra(Contants.EXTRA_ISREALDATA, false);
+        startActivity(intent);
     }
 
     private void setUpSwap(){
@@ -103,7 +106,7 @@ public class RestockActivity extends AppCompatActivity
                 int position = viewHolder.getAdapterPosition();
 
                 if (direction == ItemTouchHelper.LEFT){
-                    dB.deleteRestockItem(mAdapter.getDataItem(position).getID());
+                    dB.deleteNewItem(mAdapter.getDataItem(position).getID());
                     mAdapter.removeItem(position);
                 }
             }
@@ -134,15 +137,6 @@ public class RestockActivity extends AppCompatActivity
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
-    @Override
-    public void onClick(View view, int position) {
-        Intent intent = new Intent(this, InformationActivity.class);
-        intent.putExtra(Contants.EXTRA_DATAITEM, mAdapter.getDataItem(position));
-        intent.putExtra(Contants.ISMASTER, preferences.getBoolean(Contants.ISMASTER, true));
-        intent.putExtra(Contants.EXTRA_ISREALDATA, true);
-        startActivity(intent);
-    }
-
     /*REFRESH PAGE*/
     private void setupSwiper() {
         swiperRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -156,7 +150,7 @@ public class RestockActivity extends AppCompatActivity
 
     void refreshPage(){
         //Update adapter and notify dataset change
-        mAdapter.updateData(dB.getRestockLog());
+        mAdapter.updateData(dB.getListOfDataItem());
         swiperRefresh.setRefreshing(false);
     }
 
@@ -188,7 +182,7 @@ public class RestockActivity extends AppCompatActivity
         alertA.setTitle("Delete the Table?");
         //should make icons to follow the different options.
         alertA
-                .setMessage("Are you sure you want to delete the restock table?")
+                .setMessage("Are you sure you want to delete the table?")
                 .setCancelable(true)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int which){
@@ -209,14 +203,14 @@ public class RestockActivity extends AppCompatActivity
     }
 
     private void clearDatabase(){
-        dB.clearRestockTable();
-        Toast.makeText(this, "Restock table has been cleared!", Toast.LENGTH_SHORT);
+        dB.clearNewItemTable();
+        Toast.makeText(this, "New items table has been cleared!", Toast.LENGTH_SHORT);
         refreshPage();
     }
 
     /*EXPORT DATABASE*/
     private void exportLog() {
-        dB.exportRestockTable();
+        dB.exportUnfinishTable();
         Toast.makeText(this, "Table has been exported!", Toast.LENGTH_SHORT).show();
     }
 
