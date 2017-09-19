@@ -3,7 +3,7 @@ Price Check is an Android app that allows users to check the price of items by e
 
 |Main Menu|Information Page|Restock Log|
 |---|---|---|
-|<img src="/screenshots/Screenshot_20170918-212258.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170818-173250.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170831-140956.png" width="250px" height="auto">|
+|<img src="/screenshots/Screenshot_20170918-212258.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170818-173250.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170918-213648.png" width="250px" height="auto">|
 
 ## Motivation
 This app was made as a management tool for a local gift shop & convenience store. The store owners use a very old FoxPro inventory management system, so marking items for restocking and checking the price of an item is a time consuming process.
@@ -42,7 +42,7 @@ Users can use Admin Mode through the context menu in the main menu, but only if 
 
 |The Context Menu with Admin Mode|Information Page (Regular)|Information Page (Admin)|
 |---|---|---|
-|<img src="/screenshots/Screenshot_20170831-133851.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170818-173250.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170918-212441.png" width="250px" height="auto">|
+|<img src="/screenshots/Screenshot_20170831-141020.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170818-173250.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170918-212441.png" width="250px" height="auto">|
 
 A user with Admin privileges will notice a change in the Information Page after unlocking Admin Mode. Admins can view the order history of an item, usually seeing the last five shipments and unit prices. In the top right corner of the information page is a button that allows admins to mark items as favorites, meaning that the item will be saved onto the Restock Log.
 
