@@ -1,9 +1,9 @@
 # Price Check
 Price Check is an Android app that allows users to check the price of items by entering the barcode ID given an DBF inventory. Users in Admin Mode can view the order history of an item and tag items for restocking.
 
-|Main Menu|Information Page|Restock Log|
+|Main Menu|Fetching an Item|Restock Log|
 |---|---|---|
-|<img src="/screenshots/Screenshot_20170918-212258.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170818-173250.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170918-213648.png" width="250px" height="auto">|
+|<img src="/screenshots/Screenshot_20170918-212258.png" width="250px" height="auto">|<img src="/screenshots/ezgif-1-1b83deff8e.gif" width="240px" height="auto">|<img src="/screenshots/Screenshot_20170918-213648.png" width="250px" height="auto">|
 
 ## Motivation
 This app was made as a management tool for a local gift shop & convenience store. The store owners use a very old FoxPro inventory management system, so marking items for restocking and checking the price of an item is a time consuming process.
@@ -51,9 +51,9 @@ This page compiles the full list of items that an admin has favorited for restoc
 
 Admins can export the database using the export feature in the context menu in the top right corner. The app by default exports a CSV file directly to the designated Downloads folder of the Android device. Using [OpenCSV](http://opencsv.sourceforge.net/), the CSV file will be listed according to the last sorting query requested, and will be labeled with a timestamp to avoid accidental overwriting.
 
-|Restock Log|
-|---|
-|<img src="/screenshots/Screenshot_20170918-213648.png" width="250px" height="auto">|
+|Restock Log|Deleting a Restock Item|
+|---|---|
+|<img src="/screenshots/Screenshot_20170918-213648.png" width="250px" height="auto">|<img src="/screenshots/ezgif-1-0f9bb02d78.gif" width="240px" height="auto">|
 
 ### Items to Add (Admin Mode Restricted)
 This recently added feature allows a user with admin priveleges to add items to the database. Because the app's database is purely local, items added to the database are added onto a separate table. When a new item is scanned, the user will be prompted to choose whether or not the item should be added (Figure 1). Then the user will be asked to fill in the remaining required description and price (FIgure 2).
@@ -64,6 +64,6 @@ This recently added feature allows a user with admin priveleges to add items to 
 
 The exclusive New Items list can be accessed through the "Items to Add" option in the main menu. Like the Restock Log, an item's information page can be accessed by touching the item, and an item can be deleted by swiping the item to the left. The information page will be colored red instead of green to denote that the item has not been registered in the main database. This table can also be exported into a CSV file using the menu in the top right corner. The created CSV file will be saved in the Downloads file and can be used to import into the DBF program of the user's choice.
 
-|Items to Add List|Item Information Page (New Item)|
+|Items to Add List|Deleting a New Item|Item Information Page (New Item)|
 |---|---|
-|<img src="/screenshots/Screenshot_20170918-213648.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170918-212202.png" width="250px" height="auto">|
+|<img src="/screenshots/Screenshot_20170918-213648.png" width="250px" height="auto">|<img src="/screenshots/ezgif-1-255da2d71b.gif" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170918-212202.png" width="250px" height="auto">|
