@@ -3,13 +3,15 @@ Price Check is an Android app that allows users to check the price of items by e
 
 |Main Menu|Information Page|Restock Log|
 |---|---|---|
-|<img src="/screenshots/Screenshot_20170831-133841.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170818-173250.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170831-140956.png" width="250px" height="auto">|
+|<img src="/screenshots/Screenshot_20170918-212258.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170818-173250.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170831-140956.png" width="250px" height="auto">|
 
 ## Motivation
 This app was made as a management tool for a local gift shop & convenience store. The store owners use a very old FoxPro inventory management system, so marking items for restocking and checking the price of an item is a time consuming process.
 
 ## What's New
-* Bluetooth Scanner Support
+* 2.0.0.0 Bluetooth Scanner Support
+* 2.1.0.0 Enhanced Restock Log to display most recent order (9/17/17)
+* 3.0.0.0 New Item Feature Support (9/19/17)
 
 ## Prerequisites
 * Android SDK 25 (Minimum SDK 19)
@@ -33,14 +35,14 @@ A Bluetooth Scanner as HID Input can be used to scan items as well. By selecting
 
 |Manual Input|Information Page|
 |---|---|
-|<img src="/screenshots/Screenshot_20170831-133851.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170818-173250.png" width="250px" height="auto">|
+|<img src="/screenshots/Screenshot_20170831-133851.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170818-173250.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170918-212441.png" width="250px" height="auto"|
 
 ## Admin Mode
 Users can use Admin Mode through the context menu in the main menu, but only if they know the password. This mode is only to be used by those who manage the store inventory directly.
 
 |The Context Menu with Admin Mode|Information Page (Regular)|Information Page (Admin)|
 |---|---|---|
-|<img src="/screenshots/Screenshot_20170831-133851.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170818-173250.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170831-134049.png" width="250px" height="auto">|
+|<img src="/screenshots/Screenshot_20170831-133851.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170818-173250.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170918-212441.png" width="250px" height="auto">|
 
 A user with Admin privileges will notice a change in the Information Page after unlocking Admin Mode. Admins can view the order history of an item, usually seeing the last five shipments and unit prices. In the top right corner of the information page is a button that allows admins to mark items as favorites, meaning that the item will be saved onto the Restock Log.
 
@@ -51,4 +53,17 @@ Admins can export the database using the export feature in the context menu in t
 
 |Restock Log|
 |---|
-|<img src="/screenshots/Screenshot_20170831-140956.png" width="250px" height="auto">|
+|<img src="/screenshots/Screenshot_20170918-213648.png" width="250px" height="auto">|
+
+### Items to Add (Admin Mode Restricted)
+This recently added feature allows a user with admin priveleges to add items to the database. Because the app's database is purely local, items added to the database are added onto a separate table. When a new item is scanned, the user will be prompted to choose whether or not the item should be added (Figure 1). Then the user will be asked to fill in the remaining required description and price (FIgure 2).
+
+|Figure 1|Figure 2|
+|---|---|
+|<img src="/screenshots/Screenshot_20170918-212242.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170918-212246.png" width="250px" height="auto">|
+
+The exclusive New Items list can be accessed through the "Items to Add" option in the main menu. Like the Restock Log, an item's information page can be accessed by touching the item, and an item can be deleted by swiping the item to the left. The information page will be colored red instead of green to denote that the item has not been registered in the main database. This table can also be exported into a CSV file using the menu in the top right corner. The created CSV file will be saved in the Downloads file and can be used to import into the DBF program of the user's choice.
+
+|Items to Add List|Item Information Page (New Item)|
+|---|---|
+|<img src="/screenshots/Screenshot_20170918-213648.png" width="250px" height="auto">|<img src="/screenshots/Screenshot_20170918-212202.png" width="250px" height="auto">|
