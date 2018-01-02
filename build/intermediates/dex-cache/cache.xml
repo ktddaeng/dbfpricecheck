@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.android\build-cache\1184eafa9209fa3dd664622be9dca666b7de4860\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="ec224ad624f39212bacaf5903d989fe066166e7a">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\classes_117d0b0de9ccbca3e3b6505d31bf7fdf55c88dad.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.android\build-cache\8d52893d5cbe3d2e1e88c393018020f5a9ea975d\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="0e1f104cf60bfe34147ef670229f2635789c79a4">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\classes_0a11ddf9e96aac06bb037997377b4c37cf7158d9.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.android\build-cache\6b5423587ef1070899b027874f2093cbc07dfe4f\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="6ef31f1555bb4cc513ec8d52711365a8b89f3600">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\classes_987060e2387905ad1c74f67de24a84e676b8019d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\AppData\Local\Android\Sdk\extras\android\m2repository\com\android\support\support-annotations\25.3.1\support-annotations-25.3.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="bf8841d29fa39e077730e7a91222c2ce269fa7c9">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\support-annotations-25.3.1_691c08f8452086f5fa24bafc5947b5cf5a1a4801.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.android\build-cache\2208487e015cdd49a3ba0c69fb68f083d8966d42\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="914f5d3e3ace66080e59613708f06d129a222e25">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\classes_58b4b391200200e661ace235fad1c315fbc3fdb4.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.android\build-cache\be5b4e97a5e87d9c37b9b5f28821ac6c62e7e166\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="d4cf6227dd6a2ceff0f7dcf0c324380b7abf2c28">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\classes_8888a7f4b5555df8bf564176a341f2c912eea3c3.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\AppData\Local\Android\Sdk\extras\m2repository\com\android\support\constraint\constraint-layout-solver\1.0.2\constraint-layout-solver-1.0.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="b9cd8fc6bd15cb915735d34535db30ece0c44603">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\constraint-layout-solver-1.0.2_d34b016052ea088bd27ffbbeb732d67d2126de75.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.android\build-cache\35848c9a4df11397eb224cf394b62fa58478dc9c\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="da27a32db6af8954ee8061537c7d476fcb1df46f">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\classes_c1b8c2b46098da066c76cb5e89b9159cc168ca17.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\libs\opencsv-2.4.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="60597690a065746f9dd950e2e47e5f476b6c7367">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\opencsv-2.4_f620937d31ee56043b0e29a1ec35d8b7079bf158.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.android\build-cache\090cb13a59581361490857aa98462e92b7c07253\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="efb8cb62d47d157c29d1521daac7eefd4cb881ee">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\classes_ce2f0b3c7229a8e99cb9ac35e92a6857902ef0e0.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.android\build-cache\56cf2b4b7be49a3f048450fd17b16425f93dbf51\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="47635644d0d5c103c1dd8360549eb9ba3225c7d3">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\classes_d53fd1affd7b6b555971ea3f9150f11ad9bfd56e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.android\build-cache\b9410614a380270fb7113c743d11f1442627c08f\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="45f697922e6f072daa12f8a2995dc77ab03c11da">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\classes_f5095814a9630b1bdb40265d1461de3ff399b0a4.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.android\build-cache\dba9a80b74e11ec37486f9641ab66bed34e904e9\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="150252b33b00274cc868578ade018fda0d43a3eb">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\classes_5d4a03d5861764051374d6054d26d15dc8525fe3.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.android\build-cache\cd5fba96136fc154a3653d3119459ed9281e56f2\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="38789e20ace9ab7dbd00554bd2673ab424478d3b">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\classes_0401b714892955ef5ed550d897a8d1fbea8e59c5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.android\build-cache\f12258586e5c93ecc749309ba369d8d609983cc3\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="44ee06abb66da30f5855e6bf54574e64cdcd982a">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\classes_f233c18315f4c39984addba2432703bd71783b57.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.android\build-cache\0ba8b15298b27ee8e8a0a4ab1d0ef4ad5fd49d40\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="052f5f840f21174a3ecf6544130194e2652cbb73">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\classes_3998c06294a647336e6788de9f6f67c23f1cc882.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.android\build-cache\9dc4aa0f8dfffdbe447d145563c10ed8cb2fad99\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="95519720620b553f63afc789beba9ad582807f7c">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\classes_1c9834572a2eb163afe9d910d0d0e1289b033943.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.android\build-cache\03f8aaf43f275990da289eb62acc64dab5e58af3\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\classes_8edf8097c58a4f80b9b896025a4c785cf0137456.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.android\build-cache\85e32ac9338b007c26b25698f1db0b6e8bd1d0aa\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="32b455f8f2e0b497b990a8039d2cf827865e53da">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\classes_6aef5557abb4f3714cb3057fe2b241eb95858db6.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.android\build-cache\69564e0d42a136bf74c6a28eed2e1f4fe27febc8\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="4a26a1154d053ab11aaf4c3967c42a4d66390991">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\classes_0e5a60da3fffb2fc170553f69d4f18477ce0e146.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Lynn D\.gradle\caches\modules-2\files-2.1\com.google.zxing\core\3.2.1\2287494d4f5f9f3a9a2bb6980e3f32053721b315\core-3.2.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="2287494d4f5f9f3a9a2bb6980e3f32053721b315">
+        <dex dex="C:\Users\Lynn D\AndroidStudioProjects\dbfpricecheck\app\build\intermediates\pre-dexed\debug\core-3.2.1_a72d561fd0dc5d1577620626666be57a1fe0d5d4.jar" />
+    </item>
+
+</items>

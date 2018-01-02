@@ -30,4 +30,12 @@ public class ResInfoActivity extends AppCompatActivity {
         dB = DatabaseHandler.getInstance(this);
 
     }
+
+    // make function that check extras
+    /*
+    get is new item boolean (if is new item true, then don't need to check database, otherwise
+        if is in database, then
+        datepicker
+
+     */
 }
