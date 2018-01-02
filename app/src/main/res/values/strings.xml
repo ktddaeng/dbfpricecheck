@@ -26,12 +26,22 @@
     <string name="sample_record_receive">99</string>
     <string name="sample_record_date">11/11/1111</string>
 
+    <string name="log_date">Date</string>
+    <string name="log_show_qty">Showroom</string>
+    <string name="log_back_qty">Backstore</string>
+    <string name="log_location">Location</string>
+    <string name="log_other1_hint">Other 1</string>
+    <string name="log_other1_hint2">Other 2</string>
+    <string name="log_other1_hint3">Other 3</string>
+    <string name="log_other1_hint4">Other 4</string>
+
     <string name="progress_msg">Syncing Database.\nThis could take a while.</string>
 
     <string name="str_button_purge">Purge</string>
     <string name="str_button_master">Admin Mode</string>
     <string name="str_button_help">Help</string>
     <string name="str_button_export">Export</string>
+    <string name="str_button_save">Save</string>
 
     <string name="str_label_id">ID No.</string>
     <string name="str_label_desc">Description</string>

@@ -16,7 +16,9 @@
         android:roundIcon="@mipmap/ic_launcherpricecheckr"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,13 +27,23 @@
         </activity>
         <activity
             android:name=".logic.AnyOrientationActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".InformationActivity" />
-        <activity android:name=".logic.SwipeDismissBaseActivity" />
-        <activity android:name=".RestockActivity" />
-        <activity android:name=".UnfinishActivity"></activity>
+        <activity
+            android:name=".InformationActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden" />
+        <activity
+            android:name=".logic.SwipeDismissBaseActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden" />
+        <activity
+            android:name=".RestockActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden" />
+        <activity
+            android:name=".UnfinishActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden" />
+        <activity android:name=".ResInfoActivity"></activity>
     </application>
 
 </manifest>

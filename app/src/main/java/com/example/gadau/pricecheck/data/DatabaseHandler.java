@@ -33,6 +33,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "priceInventory";
     public static final String TABLE_INVENTORY = "inventory";
     public static final String TABLE_LOG = "shiplog";
+    //public static final String TABLE_STOCKLOG = "stocklog";
     public static final String TABLE_RESTOCK = "restock";
     public static final String TABLE_NEWITEM = "newitem";
     public static final int DATABASE_VERSION = 1;
@@ -47,6 +48,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_VENDOR = "log_vendor";
     private static final String KEY_RECEIVED = "log_received";
     private static final String KEY_DATE = "log_date";
+    private static final String KEY_RESTOCK_DATE = "restock_date";
+    private static final String KEY_RESTOCK_S_QTY = "restock_sqty";
+    private static final String KEY_RESTOCK_B_QTY = "restock_bqty";
+    private static final String KEY_RESTOCK_LOCATION = "restock_location";
+    private static final String KEY_RESTOCK_OTHER1 = "restock_other1";
+    private static final String KEY_RESTOCK_OTHER2 = "restock_other2";
+    private static final String KEY_RESTOCK_OTHER3 = "restock_other3";
+    private static final String KEY_RESTOCK_OTHER4 = "restock_other4";
 
     private static DatabaseHandler instance;
 
@@ -80,7 +89,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreateRestock(SQLiteDatabase db) {
         String CREATE_RESTOCK = "CREATE TABLE " +
                 TABLE_RESTOCK + "(" + KEY_RESTOCK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + KEY_ITEMNO + " TEXT, " + KEY_DESC + " TEXT, " + KEY_PRICE + " TEXT)";
+                + KEY_ITEMNO + " TEXT, " + KEY_RESTOCK_DATE + " TEXT, " + KEY_RESTOCK_LOCATION + " TEXT, "
+                + KEY_RESTOCK_S_QTY + " TEXT, " + KEY_RESTOCK_B_QTY + " TEXT, "
+                + KEY_RESTOCK_OTHER1 + " TEXT, " + KEY_RESTOCK_OTHER2 + " TEXT, " + KEY_RESTOCK_OTHER3 + " TEXT, " + KEY_RESTOCK_OTHER4 + " TEXT)";
         db.execSQL(CREATE_RESTOCK);
     }
 
@@ -297,6 +308,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
     }
 
+    public RestockItem getRestockItem(String id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_RESTOCK,
+                new String[]{ KEY_RESTOCK_ID, KEY_ITEMNO, KEY_RESTOCK_DATE, KEY_RESTOCK_LOCATION,
+                    KEY_RESTOCK_S_QTY, KEY_RESTOCK_B_QTY,
+                    KEY_RESTOCK_OTHER1, KEY_RESTOCK_OTHER2, KEY_RESTOCK_OTHER3, KEY_RESTOCK_OTHER4},
+                KEY_ITEMNO + "=?",
+                new String[]{id},
+                null, null, null, null);
+        //Log.i("DB Handler", cursor.getString(1) + ", " + cursor.getString(2) + ", " + cursor.getString(3));
+        if (cursor != null && cursor.moveToFirst()) {
+            RestockItem item = new RestockItem();
+            item.setID(cursor.getString(1));
+            item.setLo_logdate(cursor.getString(2));
+            item.setLo_location(cursor.getString(3));
+            item.setLo_sqty(cursor.getString(4));
+            item.setLo_bqty(cursor.getString(5));
+            item.setLo_other1(cursor.getString(6));
+            item.setLo_other2(cursor.getString(7));
+            item.setLo_other3(cursor.getString(8));
+            item.setLo_other4(cursor.getString(9));
+            return item;
+        }
+        return null;
+    }
+
     public List<RestockItem> getRestockLog() {
         List<RestockItem> listItems = new ArrayList<>();
         Cursor cursor = getRestockLogCursor();
@@ -309,9 +346,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 di.setDesc(cursor.getString(2));
                 di.setPrice(cursor.getString(3));
                 LogItem li = getListofData(di.getID()).get(0);
-                di.setLo_desc(li.getVendor());
-                di.setLo_qty(li.getReceive());
-                di.setLo_date(li.getDate());
+                if (li != null) {
+                    di.setLo_desc(li.getVendor());
+                    di.setLo_qty(li.getReceive());
+                    di.setLo_date(li.getDate());
+                }
                 listItems.add(di);
             } while (cursor.moveToNext());
             cursor.close();
@@ -359,6 +398,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     } else {
                         bw.write(cursor.getColumnName(i));
                     }
+                    bw.write(",logdate,location,showroom,backstore,other1,other2,other3,other4");
                 }
                 bw.newLine();
                 for (int i = 0; i < rowCount; i++) {
@@ -369,6 +409,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         else
                             bw.write(cursor.getString(j));
                     }
+                    RestockItem ri = getRestockItem(cursor.getString(1));
+                    bw.write("," + ri.getLo_logdate() + "," + ri.getLo_location()
+                        + "," + ri.getLo_sqty() + "," + ri.getLo_sqty()
+                        + "," + ri.getLo_other1() + "," + ri.getLo_other2()
+                        + "," + ri.getLo_other3() + "," + ri.getLo_other4());
                     bw.newLine();
                 }
                 bw.flush();

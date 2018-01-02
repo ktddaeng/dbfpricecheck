@@ -1,6 +1,7 @@
 package com.example.gadau.pricecheck.logic;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,9 @@ public class RestockAdapter extends RecyclerView.Adapter<RestockAdapter.ResListI
         holder.iLoDesc.setText(listOfData.get(position).getLo_desc());
         holder.iLoRec.setText(listOfData.get(position).getLo_qty());
         holder.iLoDate.setText(listOfData.get(position).getLo_date());
+        holder.iRecSQty.setText(listOfData.get(position).getLo_sqty());
+        holder.iRecBQty.setText(listOfData.get(position).getLo_bqty());
+        holder.iRecDate.setText(listOfData.get(position).getLo_logdate());
     }
 
     public void setClickListener(ItemClickListener clickListener){
@@ -74,6 +78,9 @@ public class RestockAdapter extends RecyclerView.Adapter<RestockAdapter.ResListI
         public TextView iLoDesc;
         public TextView iLoRec;
         public TextView iLoDate;
+        public TextView iRecSQty;
+        public TextView iRecBQty;
+        public TextView iRecDate;
 
         public ResListItem(View itemView) {
             super(itemView);
@@ -83,6 +90,9 @@ public class RestockAdapter extends RecyclerView.Adapter<RestockAdapter.ResListI
             iLoDesc = (TextView) itemView.findViewById(R.id.restock_lo_1);
             iLoRec = (TextView) itemView.findViewById(R.id.restock_lo_2);
             iLoDate = (TextView) itemView.findViewById(R.id.restock_lo_3);
+            iRecSQty = (TextView) itemView.findViewById(R.id.restock_lo_4);
+            iRecBQty = (TextView) itemView.findViewById(R.id.restock_lo_5);
+            iRecDate = (TextView) itemView.findViewById(R.id.restock_lo_6);
         }
 
         @Override

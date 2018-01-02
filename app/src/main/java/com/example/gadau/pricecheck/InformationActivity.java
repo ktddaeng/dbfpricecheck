@@ -1,5 +1,7 @@
 package com.example.gadau.pricecheck;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +17,7 @@ import com.example.gadau.pricecheck.data.Contants;
 import com.example.gadau.pricecheck.data.DataItem;
 import com.example.gadau.pricecheck.data.DatabaseHandler;
 import com.example.gadau.pricecheck.data.LogItem;
+import com.example.gadau.pricecheck.data.RestockItem;
 import com.example.gadau.pricecheck.data.MenuOption;
 import com.example.gadau.pricecheck.logic.LogAdapter;
 import com.example.gadau.pricecheck.logic.MainAdapter;
@@ -29,6 +32,7 @@ public class InformationActivity extends SwipeDismissBaseActivity {
     private List<LogItem> listOfData;
     private LogAdapter mAdapter;
     private boolean isActivated;
+    private SharedPreferences preferences;
     //private LottieAnimationView animationView;
     private ToggleButton toggle;
 
@@ -37,6 +41,7 @@ public class InformationActivity extends SwipeDismissBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_information);
         Toast.makeText(this, "Swipe Right to Close", Toast.LENGTH_SHORT).show();
+        preferences = getSharedPreferences(Contants.SETTINGS, MODE_PRIVATE);
 
         TextView infoID = (TextView) findViewById(R.id.info_id);
         TextView infoDesc = (TextView) findViewById(R.id.info_desc);
@@ -68,10 +73,11 @@ public class InformationActivity extends SwipeDismissBaseActivity {
         infoDollars.setText(price.substring(0, index));
         infoCents.setText(price.substring(index + 1));
 
-        if (getIntent().getExtras().getBoolean(Contants.ISMASTER)){
+        if (getIntent().getExtras().getBoolean(Contants.ISMASTER) && getIntent().getExtras().getBoolean(Contants.EXTRA_ISREALDATA)){
             setUpRecycler();
             setUpRestock(di.getID());
         }
+        Toast.makeText(this, "Status: " + isActivated, Toast.LENGTH_SHORT).show();
     }
 
     private void setUpRecycler(){
@@ -83,7 +89,63 @@ public class InformationActivity extends SwipeDismissBaseActivity {
 
         mAdapter = new LogAdapter(listOfData);
         mRecycleView.setAdapter(mAdapter);
+    }
 
+    private void setUpRestockInformation(){
+        RestockItem ri = dB.getRestockItem(di.getID());
+        if (ri == null){
+            return;
+        }
+        View resView = findViewById(R.id.rec_restock_info);
+        TextView recDate = (TextView) findViewById(R.id.rec_restock_lastdate);
+        TextView recLoc = (TextView) findViewById(R.id.rec_restock_location);
+        TextView recShowQty = (TextView) findViewById(R.id.rec_restock_showroom);
+        TextView recBackQty = (TextView) findViewById(R.id.rec_restock_backstore);
+        TextView recOther1 = (TextView) findViewById(R.id.rec_restock_other1);
+        TextView recOther2 = (TextView) findViewById(R.id.rec_restock_other2);
+        TextView recOther3 = (TextView) findViewById(R.id.rec_restock_other3);
+        TextView recOther4 = (TextView) findViewById(R.id.rec_restock_other4);
+
+        recDate.setText(ri.getLo_logdate());
+        recLoc.setText(ri.getLo_location());
+        recShowQty.setText(ri.getLo_sqty());
+        recBackQty.setText(ri.getLo_bqty());
+        recOther1.setText(ri.getLo_other1());
+        recOther2.setText(ri.getLo_other2());
+        recOther3.setText(ri.getLo_other3());
+        recOther4.setText(ri.getLo_other4());
+        resView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchRestockPage(false);
+            }
+        });
+    }
+
+    private void launchRestockPage(boolean isNewItem){
+        if (!preferences.getBoolean(Contants.ISMASTER, true)){
+            return;
+        }
+        //TODO: Pass information here
+        Intent i = new Intent(this, ResInfoActivity.class);
+        i.putExtra(Contants.EXTRA_DATAITEM, di.getID());
+        if (isNewItem){
+            i.putExtra(Contants.EXTRA_ISREALDATA, true);
+        } else {
+            i.putExtra(Contants.EXTRA_ISREALDATA, false);
+        }
+
+        startActivityForResult(i, Contants.WAS_CHANGED);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Contants.WAS_CHANGED){
+            if (resultCode == RESULT_OK) {
+                setUpRestockInformation();
+            }
+        }
     }
 
     private void setUpRestock(String id){
@@ -93,8 +155,11 @@ public class InformationActivity extends SwipeDismissBaseActivity {
         if (dB.isOnRestock(id)){
             isActivated = true;
             toggle.setChecked(true);
+            setUpRestockInformation();
         } else {
             isActivated = false;
+            View resView = findViewById(R.id.rec_restock_info);
+            resView.setVisibility(View.GONE);
             toggle.setChecked(false);
         }
         toggle.setText("None");
@@ -106,38 +171,27 @@ public class InformationActivity extends SwipeDismissBaseActivity {
                 onRestock(identification);
             }
         });
-
-        /*
-        animationView = (LottieAnimationView) findViewById(R.id.animation_view);
-        animationView.setVisibility(View.VISIBLE);
-        if (dB.isOnRestock(id)){
-            isActivated = true;
-            animationView.setProgress(1);
-        } else {
-            isActivated = false;
-            animationView.setProgress(0);
-        }
-
-        animationView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onRestock(identification);
-            }
-        });
-        */
     }
 
     private void onRestock(String id){
-        isActivated = !isActivated;
-
-        if (isActivated){
+        Toast.makeText(this, "Status: " + isActivated, Toast.LENGTH_SHORT).show();
+        if (isActivated == false){
+            isActivated = true;
             toggle.setChecked(true);
+            //TODO: Change Later to add through new page
             dB.addRestockItem(id);
-            Toast.makeText(this, "Restock Set", Toast.LENGTH_SHORT).show();
+            refreshPage();
+            //launchRestockPage(true);
         } else {
+            isActivated = false;
             toggle.setChecked(false);
             dB.deleteRestockItem(id);
-            Toast.makeText(this, "No Restock", Toast.LENGTH_SHORT).show();
+            refreshPage();
         }
+    }
+
+    private void refreshPage(){
+        finish();
+        startActivity(getIntent());
     }
 }

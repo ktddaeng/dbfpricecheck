@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.gadau.pricecheck.ResInfoActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_edit"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?attr/colorAccent"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        <RelativeLayout
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="16dp"
+            android:layout_gravity="start">
+            <ImageView
+                android:id="@+id/button_cancel"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_close_white_24dp"/>
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorMenuText"
+            android:textAllCaps="true"
+            android:layout_gravity="end"
+            android:layout_margin="16dp"
+            android:textSize="16sp"
+            android:text="@string/str_button_save"/>
+
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        style="@style/EditInput"
+        android:id="@+id/input_dateWrapper"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextViewInput.Field"
+            android:text="@string/log_date"
+            android:id="@+id/textView1" />
+
+        <TextView
+            android:id="@+id/input_dialog_date"
+            style="@style/TextField1"
+            tools:text="@string/sample_record_date" />
+    </RelativeLayout>
+    <View style="@style/LineDivider"/>
+
+    <RelativeLayout
+        android:id="@+id/input_locWrapper"
+        style="@style/EditInput"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextViewInput.Field"
+            android:text="@string/log_location"
+            android:id="@+id/textView2" />
+
+        <EditText
+            android:id="@+id/input_dialog_location"
+            style="@style/TextField"
+            android:hint="@string/sample_desc"
+            android:inputType="text"/>
+    </RelativeLayout>
+    <View style="@style/LineDivider"/>
+
+    <RelativeLayout
+        android:id="@+id/input_show_qtyWrapper"
+        style="@style/EditInput"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TextViewInput.Field"
+            android:text="@string/log_show_qty"
+            android:id="@+id/textView3" />
+
+        <TextView
+            android:id="@+id/input_dialog_showqty"
+            style="@style/TextField1"
+            android:text="@string/sample_cents" />
+    </RelativeLayout>
+    <View style="@style/LineDivider"/>
+
+    <RelativeLayout
+        android:id="@+id/input_back_qtyWrapper"
+        style="@style/EditInput"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/TextViewInput.Field"
+            android:text="@string/log_back_qty" />
+
+        <TextView
+            android:id="@+id/input_dialog_backqty"
+            style="@style/TextField1"
+            android:text="@string/sample_cents"/>
+    </RelativeLayout>
+    <View style="@style/LineDivider"/>
+
+    <RelativeLayout
+        android:id="@+id/input_other1Wrapper"
+        style="@style/EditInput"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/input_dialog_other"
+            style="@style/TextViewInput.Field"
+            android:hint="Enter Text Here!"
+            android:inputType="textMultiLine"/>
+    </RelativeLayout>
+</LinearLayout>

@@ -35,24 +35,62 @@
             style="@style/ListStyle4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:layout_weight="2"
+            android:layout_weight="1"
             tools:text="@string/sample_record_vendor"/>
         <TextView
             android:id="@+id/restock_lo_2"
             style="@style/ListStyle4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_weight="3"
+            android:layout_weight="2"
             tools:text="@string/sample_record_receive"/>
         <TextView
             android:id="@+id/restock_lo_3"
             style="@style/ListStyle4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1.5"
             android:gravity="right"
-            android:layout_weight="3"
             tools:text="@string/sample_record_date"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/ListStyle4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:layout_weight="2"
+            android:text="Show:"/>
+        <TextView
+            android:id="@+id/restock_lo_4"
+            style="@style/ListStyle4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            tools:text="@string/sample_cents"/>
+        <TextView
+            style="@style/ListStyle4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Back:"/>
+        <TextView
+            android:id="@+id/restock_lo_5"
+            style="@style/ListStyle4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            tools:text="@string/sample_cents"/>
+        <TextView
+            android:id="@+id/restock_lo_6"
+            style="@style/ListStyle4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_weight="1.5"
+            tools:text="11/11/1111"/>
     </LinearLayout>
 </LinearLayout>

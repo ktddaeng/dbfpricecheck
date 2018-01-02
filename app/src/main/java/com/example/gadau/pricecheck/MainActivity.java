@@ -17,6 +17,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +37,8 @@ import com.example.gadau.pricecheck.logic.ItemClickListener;
 import com.example.gadau.pricecheck.logic.MainAdapter;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +63,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         listOfData.add(new MenuOption(R.string.header1, R.string.desc1, R.color.colorAccent2));
         listOfData.add(new MenuOption(R.string.header2, R.string.desc2, R.color.colorPrimary));
         listOfData.add(new MenuOption(R.string.header3, R.string.desc3, R.color.colorAccent));
-        listOfData.add(new MenuOption(R.string.header4, R.string.desc4, R.color.colorPrimaryDark));
         listOfData.add(new MenuOption(R.string.header5, R.string.desc5, R.color.colorRedBG));
+        listOfData.add(new MenuOption(R.string.header4, R.string.desc4, R.color.colorPrimaryDark));
 
         setUpToolbar();
         setUpRecycler();
@@ -138,7 +141,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                     }
                 });
         final AlertDialog dialog = builder.create();
-
         if (getResources().getConfiguration().hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO){
             Toast.makeText(this, "Bluetooth Scanner Detected", Toast.LENGTH_SHORT).show();
             inID.addTextChangedListener(new TextWatcher() {
@@ -163,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialog.show();
     }
-    
+
     //Launches the Barcode Scanner
     private void barcodeMode(){
         qrScan = new IntentIntegrator(this);
@@ -196,14 +198,12 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             launchInfoPage(di, true);
         } else {
             di = dB.getNewItembyID(gottenId);
-            if (di != null && preferences.getBoolean(Contants.ISMASTER, true)) {
+            if (di != null) {
                 launchInfoPage(di, false);
                 return;
-            } else if (preferences.getBoolean(Contants.ISMASTER, true)){
-                wouldLikeNewItem(gottenId);
-                return;
             }
-            Toast.makeText(MainActivity.this, "Could not find item", Toast.LENGTH_SHORT).show();
+            wouldLikeNewItem(gottenId);
+            return;
         }
     }
 
@@ -262,18 +262,25 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO: create DataItem to be added
-                        DataItem di = new DataItem();
-                        di.setID(inID.getText().toString());
-                        String s = inDesc.getText().toString();
-                        if (inDesc.getText().length() > 24){
-                            s = s.substring(0,25);
+                        if (TextUtils.isEmpty(inID.getText())) {
+                            Toast.makeText(MainActivity.this, "ID must be entered!", Toast.LENGTH_SHORT).show();
+                        } else if (TextUtils.isEmpty(inDesc.getText())){
+                            Toast.makeText(MainActivity.this, "Description must be entered!", Toast.LENGTH_SHORT).show();
+                        } else if (TextUtils.isEmpty(inPrice.getText())){
+                            Toast.makeText(MainActivity.this, "Price must be entered!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            DataItem di = new DataItem();
+                            di.setID(inID.getText().toString());
+                            String s = inDesc.getText().toString();
+                            if (inDesc.getText().length() > 24) {
+                                s = s.substring(0, 25);
+                            }
+                            di.setDesc(s);
+                            di.setPrice(inPrice.getText().toString());
+                            dB.addNewItem(di);
+                            Toast.makeText(MainActivity.this, "Item has been added", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
                         }
-                        di.setDesc(s);
-                        di.setPrice(inPrice.getText().toString());
-                        dB.addNewItem(di);
-                        Toast.makeText(MainActivity.this, "Item has been added", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -297,10 +304,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     }
 
     private void launchNewItemPage(){
-        if (!preferences.getBoolean(Contants.ISMASTER, true)){
-            Toast.makeText(this, "Acess Denied. Admin Only.", Toast.LENGTH_SHORT).show();
-            return;
-        }
         Intent i = new Intent(this, UnfinishActivity.class);
         startActivity(i);
     }
