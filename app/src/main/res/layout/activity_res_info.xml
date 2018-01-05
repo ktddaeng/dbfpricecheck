@@ -45,6 +45,7 @@
         style="@style/EditInput"
         android:id="@+id/input_dateWrapper"
         android:orientation="horizontal">
+
         <TextView
             style="@style/TextViewInput.Field"
             android:text="@string/log_date"
@@ -52,8 +53,12 @@
 
         <TextView
             android:id="@+id/input_dialog_date"
+            android:layout_height="25dp"
+            android:background="@color/cardview_light_background"
+            android:clickable="true"
+            android:inputType="date"
             style="@style/TextField1"
-            tools:text="@string/sample_record_date" />
+            android:hint="@string/sample_record_date" />
     </RelativeLayout>
     <View style="@style/LineDivider"/>
 
@@ -85,8 +90,10 @@
 
         <TextView
             android:id="@+id/input_dialog_showqty"
+            android:background="@color/zxing_transparent"
+            android:inputType="number"
             style="@style/TextField1"
-            android:text="@string/sample_cents" />
+            android:hint="@string/sample_cents" />
     </RelativeLayout>
     <View style="@style/LineDivider"/>
 
@@ -102,7 +109,11 @@
         <TextView
             android:id="@+id/input_dialog_backqty"
             style="@style/TextField1"
-            android:text="@string/sample_cents"/>
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/zxing_transparent"
+            android:hint="@string/sample_cents"
+            android:inputType="number" />
     </RelativeLayout>
     <View style="@style/LineDivider"/>
 
@@ -110,9 +121,45 @@
         android:id="@+id/input_other1Wrapper"
         style="@style/EditInput"
         android:orientation="horizontal">
-        <TextView
-            android:id="@+id/input_dialog_other"
+        <EditText
+            android:id="@+id/input_dialog_other1"
             style="@style/TextViewInput.Field"
+            android:background="@color/zxing_transparent"
+            android:hint="Enter Text Here!"
+            android:inputType="textMultiLine"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/input_other2Wrapper"
+        style="@style/EditInput"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/input_dialog_other2"
+            style="@style/TextViewInput.Field"
+            android:background="@color/zxing_transparent"
+            android:hint="Enter Text Here!"
+            android:inputType="textMultiLine" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/input_other3Wrapper"
+        style="@style/EditInput"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/input_dialog_other3"
+            style="@style/TextViewInput.Field"
+            android:background="@color/zxing_transparent"
+            android:hint="Enter Text Here!"
+            android:inputType="textMultiLine"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/input_other4Wrapper"
+        style="@style/EditInput"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/input_dialog_other4"
+            style="@style/TextViewInput.Field"
+            android:background="@color/zxing_transparent"
             android:hint="Enter Text Here!"
             android:inputType="textMultiLine"/>
     </RelativeLayout>

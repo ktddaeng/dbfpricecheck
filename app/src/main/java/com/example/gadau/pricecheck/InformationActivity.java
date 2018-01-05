@@ -70,6 +70,11 @@ public class InformationActivity extends SwipeDismissBaseActivity {
 
         infoID.setText(di.getID());
         infoDesc.setText(di.getDesc());
+        //TODO: The line below truncates the price string where the decimal point is. Account for situation where we don't have a decimal point. meaning index < 0
+        if (index < 0) {
+            price += ".00";
+            index = price.indexOf(".");
+        }
         infoDollars.setText(price.substring(0, index));
         infoCents.setText(price.substring(index + 1));
 
@@ -178,10 +183,9 @@ public class InformationActivity extends SwipeDismissBaseActivity {
         if (isActivated == false){
             isActivated = true;
             toggle.setChecked(true);
-            //TODO: Change Later to add through new page
-            dB.addRestockItem(id);
-            refreshPage();
-            //launchRestockPage(true);
+            //dB.addRestockItem(id);
+            //refreshPage();
+            launchRestockPage(true);
         } else {
             isActivated = false;
             toggle.setChecked(false);
