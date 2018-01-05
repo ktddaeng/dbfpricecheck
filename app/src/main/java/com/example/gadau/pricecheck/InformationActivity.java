@@ -135,9 +135,9 @@ public class InformationActivity extends SwipeDismissBaseActivity {
         Intent i = new Intent(this, ResInfoActivity.class);
         i.putExtra(Contants.EXTRA_DATAITEM, di.getID());
         if (isNewItem){
-            i.putExtra(Contants.EXTRA_ISREALDATA, true);
+            i.putExtra(Contants.EXTRA_ISNEWITEM, true);
         } else {
-            i.putExtra(Contants.EXTRA_ISREALDATA, false);
+            i.putExtra(Contants.EXTRA_ISNEWITEM, false);
         }
 
         startActivityForResult(i, Contants.WAS_CHANGED);

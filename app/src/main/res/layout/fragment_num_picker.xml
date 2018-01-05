@@ -13,11 +13,26 @@
         android:layout_centerHorizontal="true"
         android:text = "Select a Number..."/>
 
-    <NumberPicker
-        android:id="@+id/num_pick"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/num_pick_tv"/>
+        android:gravity="center">
+        <NumberPicker
+            android:id="@+id/num_pick"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_margin="8dp"
+            android:scaleX="1.25"
+            android:scaleY="1.25"
+            android:descendantFocusability="blocksDescendants"/>
+        <NumberPicker
+            android:id="@+id/num_pick2"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_margin="8dp"
+            android:scaleX="1.25"
+            android:scaleY="1.25"
+            android:descendantFocusability="blocksDescendants"/>
+    </LinearLayout>
 
 </RelativeLayout>
