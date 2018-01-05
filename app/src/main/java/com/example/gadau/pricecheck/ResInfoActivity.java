@@ -69,7 +69,7 @@ public class ResInfoActivity extends AppCompatActivity {
         showroom_qty_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showroom_dialog();
+                showroomDialog();
             }
         });
 
@@ -77,12 +77,12 @@ public class ResInfoActivity extends AppCompatActivity {
         backstore_qty_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                backstore_dialog();
+                backstoreDialog();
             }
         });
     }
 
-    private void showroom_dialog() {
+    private void showroomDialog() {
         final Dialog d = new Dialog(ResInfoActivity.this);
         d.setTitle("NumPick");
         d.setContentView(R.layout.fragment_num_picker);
@@ -102,7 +102,7 @@ public class ResInfoActivity extends AppCompatActivity {
         d.show();
     }
 
-    private void backstore_dialog() {
+    private void backstoreDialog() {
         final Dialog d = new Dialog(ResInfoActivity.this);
         d.setTitle("NumPick");
         d.setContentView(R.layout.fragment_num_picker);
