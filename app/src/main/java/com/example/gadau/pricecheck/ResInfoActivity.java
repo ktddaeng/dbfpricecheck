@@ -21,13 +21,12 @@ import com.example.gadau.pricecheck.data.DatabaseHandler;
 import com.example.gadau.pricecheck.data.RestockItem;
 
 public class ResInfoActivity extends AppCompatActivity {
-    DatabaseHandler dB;
+    private DatabaseHandler dB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_res_info);
         dB = DatabaseHandler.getInstance(this);
-
     }
 }
