@@ -42,6 +42,7 @@ public class ResInfoActivity extends AppCompatActivity {
     private EditText other2Text;
     private EditText other3Text;
     private EditText other4Text;
+    boolean update_flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +59,10 @@ public class ResInfoActivity extends AppCompatActivity {
         boolean newboy = i.getExtras().getBoolean(Contants.EXTRA_ISNEWITEM);
 
         if (newboy){
+            update_flag = false;
             ri = new RestockItem();
         } else {
+            update_flag = true;
             ri = dB.getRestockItem(id);
         }
 
@@ -190,25 +193,23 @@ public class ResInfoActivity extends AppCompatActivity {
             Toast.makeText(this, "Action Invalid. Please fill in location field.", Toast.LENGTH_SHORT).show();
             return;
         }
-        String loc = location_text.getText().toString(),
-                o1 = other1Text.getText().toString(),
-                o2 = other2Text.getText().toString(),
-                o3 = other3Text.getText().toString(),
-                o4 = other4Text.getText().toString();
+        String loc = location_text.getText().toString();
 
-        /*
-        ri.setID(id);
-        ri.setVendor(vendor);
-        ri.setLocation(loc);
-        ri.setQty(qty);
-        */
+
+        ri.setLo_date(calendar_text.getText().toString());
+        ri.setLo_location(location_text.getText().toString());
+        ri.setLo_bqty(backstore_qty_tv.getText().toString());
+        ri.setLo_sqty(showroom_qty_tv.getText().toString());
+        ri.setLo_other1(other1Text.getText().toString());
+        ri.setLo_other2(other2Text.getText().toString());
+        ri.setLo_other3(other3Text.getText().toString());
+        ri.setLo_other4(other4Text.getText().toString());
         //add stuff to DB!
-        /*
         if (update_flag) {
-            dB.updateItem(di);
+            //dB.updateRestockItem(ri);
         } else {
-            dB.addItem(di);
-        }*/
+            //dB.addRestockItem(ri);
+        }
         Toast.makeText(ResInfoActivity.this, "Item Saved!", Toast.LENGTH_SHORT).show();
         //Ensure Info page is updated, too
         Intent returnIntent = new Intent();
