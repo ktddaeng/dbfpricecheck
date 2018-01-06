@@ -287,6 +287,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void addRestockItem(RestockItem ri){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_ITEMNO, ri.getID());
+
+    }
+
     public void deleteRestockItem(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_RESTOCK, KEY_ITEMNO + " = ?",
