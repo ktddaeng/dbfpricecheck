@@ -138,7 +138,7 @@ public class ResInfoActivity extends AppCompatActivity {
         d.setContentView(R.layout.fragment_num_picker);
         final NumberPicker np = (NumberPicker) d.findViewById(R.id.num_pick);
         final NumberPicker np2 = (NumberPicker) d.findViewById(R.id.num_pick2);
-
+        
         np.setMaxValue(9);
         np.setMinValue(0);
         np.setWrapSelectorWheel(true);
