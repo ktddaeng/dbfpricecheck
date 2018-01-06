@@ -196,7 +196,7 @@ public class ResInfoActivity extends AppCompatActivity {
         String loc = location_text.getText().toString();
 
 
-        ri.setLo_date(calendar_text.getText().toString());
+        ri.setLo_logdate(calendar_text.getText().toString());
         ri.setLo_location(location_text.getText().toString());
         ri.setLo_bqty(backstore_qty_tv.getText().toString());
         ri.setLo_sqty(showroom_qty_tv.getText().toString());
@@ -206,9 +206,9 @@ public class ResInfoActivity extends AppCompatActivity {
         ri.setLo_other4(other4Text.getText().toString());
         //add stuff to DB!
         if (update_flag) {
-            //dB.updateRestockItem(ri);
+            dB.updateRestockItem(ri);
         } else {
-            //dB.addRestockItem(ri);
+            dB.addRestockItem(ri);
         }
         Toast.makeText(ResInfoActivity.this, "Item Saved!", Toast.LENGTH_SHORT).show();
         //Ensure Info page is updated, too

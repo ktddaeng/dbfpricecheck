@@ -292,7 +292,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_ITEMNO, ri.getID());
+        values.put(KEY_RESTOCK_DATE, ri.getLo_logdate());
+        values.put(KEY_RESTOCK_LOCATION, ri.getLo_location());
+        values.put(KEY_RESTOCK_B_QTY, ri.getLo_bqty());
+        values.put(KEY_RESTOCK_S_QTY, ri.getLo_sqty());
+        values.put(KEY_RESTOCK_OTHER1, ri.getLo_other1());
+        values.put(KEY_RESTOCK_OTHER2, ri.getLo_other2());
+        values.put(KEY_RESTOCK_OTHER3, ri.getLo_other3());
+        values.put(KEY_RESTOCK_OTHER4, ri.getLo_other4());
 
+        db.insert(TABLE_RESTOCK, KEY_ITEMNO, values);
+        db.close();
+    }
+
+    public void updateRestockItem(RestockItem ri){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(TABLE_RESTOCK, KEY_ITEMNO + " = ?",
+                new String[] {ri.getID()});
+        addRestockItem(ri);
     }
 
     public void deleteRestockItem(String id) {
