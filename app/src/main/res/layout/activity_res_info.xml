@@ -11,7 +11,7 @@
         android:id="@+id/toolbar_edit"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="?attr/colorAccent"
+        android:background="@color/colorAccent"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
@@ -44,7 +44,8 @@
     <RelativeLayout
         style="@style/EditInput"
         android:id="@+id/input_dateWrapper"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:clickable="true">
 
         <TextView
             style="@style/TextViewInput.Field"
@@ -55,7 +56,6 @@
             android:id="@+id/input_dialog_date"
             android:layout_height="25dp"
             android:background="@color/cardview_light_background"
-            android:clickable="true"
             android:inputType="date"
             style="@style/TextField1"
             android:hint="@string/sample_record_date" />
@@ -82,7 +82,8 @@
     <RelativeLayout
         android:id="@+id/input_show_qtyWrapper"
         style="@style/EditInput"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:clickable="true">
         <TextView
             style="@style/TextViewInput.Field"
             android:text="@string/log_show_qty"
@@ -100,7 +101,8 @@
     <RelativeLayout
         android:id="@+id/input_back_qtyWrapper"
         style="@style/EditInput"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:clickable="true">
 
         <TextView
             style="@style/TextViewInput.Field"

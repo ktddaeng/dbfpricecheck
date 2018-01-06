@@ -34,9 +34,12 @@ import java.util.Locale;
 public class ResInfoActivity extends AppCompatActivity {
     DatabaseHandler dB;
     RestockItem ri;
+    private View calendar_view;
     private TextView calendar_text;
     private EditText location_text;
+    private View showroom_view;
     private TextView showroom_qty_tv;
+    private View backstore_view;
     private TextView backstore_qty_tv;
     private EditText other1Text;
     private EditText other2Text;
@@ -63,8 +66,12 @@ public class ResInfoActivity extends AppCompatActivity {
             ri = dB.getRestockItem(id);
         }
 
-        final Calendar calendar = Calendar.getInstance();
+        // Sets calendar
+        calendar_view = findViewById(R.id.input_dateWrapper);
         calendar_text = (TextView) findViewById(R.id.input_dialog_date);
+        final Calendar calendar = Calendar.getInstance();
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
+        calendar_text.setText(dateFormat.format(calendar.getTime()));
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -72,13 +79,10 @@ public class ResInfoActivity extends AppCompatActivity {
                 calendar.set(Calendar.MONTH, month);
                 calendar.set(Calendar.DAY_OF_MONTH, day);
 
-                String dateFormat = "MM/dd/yy";
-                SimpleDateFormat simpleDate = new SimpleDateFormat(dateFormat, Locale.US);
-
-                calendar_text.setText(simpleDate.format(calendar.getTime()));
+                calendar_text.setText(dateFormat.format(calendar.getTime()));
             }
         };
-        calendar_text.setOnClickListener(new View.OnClickListener() {
+        calendar_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new DatePickerDialog(ResInfoActivity.this, date, calendar.get(Calendar.YEAR),
@@ -86,24 +90,30 @@ public class ResInfoActivity extends AppCompatActivity {
             }
         });
 
+        // Sets location
         location_text = (EditText) findViewById(R.id.input_dialog_location);
 
+        // Sets showroom quantity
+        showroom_view = findViewById(R.id.input_show_qtyWrapper);
         showroom_qty_tv = (TextView) findViewById(R.id.input_dialog_showqty);
-        showroom_qty_tv.setOnClickListener(new View.OnClickListener() {
+        showroom_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showroomDialog();
             }
         });
 
+        // Sets backstore quantity
+        backstore_view = findViewById(R.id.input_back_qtyWrapper);
         backstore_qty_tv = (TextView) findViewById(R.id.input_dialog_backqty);
-        backstore_qty_tv.setOnClickListener(new View.OnClickListener() {
+        backstore_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 backstoreDialog();
             }
         });
 
+        // Sets other text
         other1Text = (EditText) findViewById(R.id.input_dialog_other1);
         other2Text = (EditText) findViewById(R.id.input_dialog_other2);
         other3Text = (EditText) findViewById(R.id.input_dialog_other3);
@@ -140,7 +150,7 @@ public class ResInfoActivity extends AppCompatActivity {
         np.setMinValue(0);
         np.setWrapSelectorWheel(true);
         np2.setMaxValue(9);
-        np2.setMinValue(9);
+        np2.setMinValue(0);
         np2.setWrapSelectorWheel(true);
 
         np.setOnClickListener(new View.OnClickListener() {
@@ -164,7 +174,7 @@ public class ResInfoActivity extends AppCompatActivity {
         np.setMinValue(0);
         np.setWrapSelectorWheel(true);
         np2.setMaxValue(9);
-        np2.setMinValue(9);
+        np2.setMinValue(0);
         np2.setWrapSelectorWheel(true);
 
         np.setOnClickListener(new View.OnClickListener() {
