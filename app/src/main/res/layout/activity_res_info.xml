@@ -58,7 +58,7 @@
             android:clickable="true"
             android:inputType="date"
             style="@style/TextField1"
-            android:hint="@string/sample_record_date" />
+            android:text="@string/sample_record_date" />
     </RelativeLayout>
     <View style="@style/LineDivider"/>
 
@@ -90,10 +90,8 @@
 
         <TextView
             android:id="@+id/input_dialog_showqty"
-            android:background="@color/zxing_transparent"
-            android:inputType="number"
             style="@style/TextField1"
-            android:hint="@string/sample_cents" />
+            android:text="@string/sample_cents" />
     </RelativeLayout>
     <View style="@style/LineDivider"/>
 
@@ -109,11 +107,7 @@
         <TextView
             android:id="@+id/input_dialog_backqty"
             style="@style/TextField1"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:background="@color/zxing_transparent"
-            android:hint="@string/sample_cents"
-            android:inputType="number" />
+            android:text="@string/sample_cents" />
     </RelativeLayout>
     <View style="@style/LineDivider"/>
 

@@ -9,7 +9,7 @@ public class Contants {
     public static final int SWIPE_MAX_OFF_PATH = 250;
     public static final int SWIPE_THRESHOLD_VELOCITY = 200;
     public static final int MY_PERMISSIONS_REQUEST = 54321;
-    public static final int WAS_CHANGED = -1;
+    public static final int WAS_CHANGED = 1222;
 
     public static final String SETTINGS = "SETTINGS";
     public static final String ISMASTER = "ISMASTER";

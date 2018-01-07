@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -82,7 +83,6 @@ public class InformationActivity extends SwipeDismissBaseActivity {
             setUpRecycler();
             setUpRestock(di.getID());
         }
-        Toast.makeText(this, "Status: " + isActivated, Toast.LENGTH_SHORT).show();
     }
 
     private void setUpRecycler(){
@@ -149,6 +149,9 @@ public class InformationActivity extends SwipeDismissBaseActivity {
         if (requestCode == Contants.WAS_CHANGED){
             if (resultCode == RESULT_OK) {
                 setUpRestockInformation();
+            } else if (resultCode == RESULT_CANCELED){
+                onRestock(di.getID());
+                setUpRestock(di.getID());
             }
         }
     }
@@ -159,6 +162,8 @@ public class InformationActivity extends SwipeDismissBaseActivity {
         toggle.setVisibility(View.VISIBLE);
         if (dB.isOnRestock(id)){
             isActivated = true;
+            View resView = findViewById(R.id.rec_restock_info);
+            resView.setVisibility(View.VISIBLE);
             toggle.setChecked(true);
             setUpRestockInformation();
         } else {
@@ -179,12 +184,9 @@ public class InformationActivity extends SwipeDismissBaseActivity {
     }
 
     private void onRestock(String id){
-        Toast.makeText(this, "Status: " + isActivated, Toast.LENGTH_SHORT).show();
         if (isActivated == false){
             isActivated = true;
             toggle.setChecked(true);
-            //dB.addRestockItem(id);
-            //refreshPage();
             launchRestockPage(true);
         } else {
             isActivated = false;

@@ -322,12 +322,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public boolean isOnRestock(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectRestockQuery = "SELECT COUNT(*) FROM " + TABLE_RESTOCK;
+
         Cursor cursor = db.query(TABLE_RESTOCK,
-                new String[]{KEY_RESTOCK_ID, KEY_ITEMNO},
+                new String[]{ KEY_RESTOCK_ID, KEY_ITEMNO},
                 KEY_ITEMNO + "=?",
                 new String[]{id},
                 null, null, null, null);
-        if (cursor != null && (cursor.getCount() > 0) && cursor.moveToFirst()){
+        if (cursor != null && cursor.moveToFirst()) {
             return true;
         } else {
             return false;
@@ -343,7 +346,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 KEY_ITEMNO + "=?",
                 new String[]{id},
                 null, null, null, null);
-        //Log.i("DB Handler", cursor.getString(1) + ", " + cursor.getString(2) + ", " + cursor.getString(3));
+
         if (cursor != null && cursor.moveToFirst()) {
             RestockItem item = new RestockItem();
             item.setID(cursor.getString(1));
@@ -372,10 +375,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 di.setDesc(cursor.getString(2));
                 di.setPrice(cursor.getString(3));
                 LogItem li = getListofData(di.getID()).get(0);
+                RestockItem ri = getRestockItem(di.getID());
                 if (li != null) {
                     di.setLo_desc(li.getVendor());
                     di.setLo_qty(li.getReceive());
                     di.setLo_date(li.getDate());
+                    di.setLo_sqty(ri.getLo_sqty());
+                    di.setLo_bqty(ri.getLo_bqty());
+                    di.setLo_logdate(ri.getLo_logdate());
                 }
                 listItems.add(di);
             } while (cursor.moveToNext());
@@ -424,8 +431,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     } else {
                         bw.write(cursor.getColumnName(i));
                     }
-                    bw.write(",logdate,location,showroom,backstore,other1,other2,other3,other4");
                 }
+                bw.write(",logdate,location,showroom,backstore,other1,other2,other3,other4");
                 bw.newLine();
                 for (int i = 0; i < rowCount; i++) {
                     cursor.moveToPosition(i);
