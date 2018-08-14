@@ -195,9 +195,10 @@
             android:textColor="@color/colorMenuText"
             tools:text="INSERT TEXT HERE 4"/>
     </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rec_log"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/fragment_log"/>
+        tools:listitem="@layout/fragment_log" />
 </LinearLayout>

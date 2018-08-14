@@ -44,6 +44,7 @@
             android:name=".UnfinishActivity"
             android:configChanges="orientation|keyboard|keyboardHidden" />
         <activity android:name=".ResInfoActivity"></activity>
+
     </application>
 
 </manifest>
