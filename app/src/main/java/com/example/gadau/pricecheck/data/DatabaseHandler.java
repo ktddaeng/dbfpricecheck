@@ -2,11 +2,13 @@ package com.example.gadau.pricecheck.data;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
 
 import com.example.gadau.pricecheck.R;
 import com.example.gadau.pricecheck.data.DatabaseContract.InvEntry;
@@ -72,6 +74,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + OrderLogEntry.COLUMN_DATE + " TEXT)";
         db.execSQL(CREATE_LOG);
 
+        String CREATE_OUTPUT = "CREATE TABLE " + OutputInvEntry.TABLE_NAME + " ("
+                + OutputInvEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + OutputInvEntry.COLUMN_BARCODE + " TEXT, "
+                + OutputInvEntry.COLUMN_SQTY + " TEXT, "
+                + OutputInvEntry.COLUMN_BQTY + " TEXT, "
+                + OutputInvEntry.COLUMN_LOC + " TEXT, "
+                + OutputInvEntry.COLUMN_DATE_S + " TEXT, "
+                + OutputInvEntry.COLUMN_DATE_B + " TEXT )";
+        db.execSQL(CREATE_OUTPUT);
+
         onCreateRestock(db);
         onCreateNewItem(db);
     }
@@ -106,44 +118,57 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    private int getItemID (String id ) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String[] projection = {
-                InvEntry._ID,
-                InvEntry.COLUMN_BARCODE,
-                InvEntry.COLUMN_DESC,
-                InvEntry.COLUMN_PRICE
-        };
-
-        Cursor cursor = db.query(InvEntry.TABLE_NAME,
-                projection,
-                InvEntry._ID + "=?",
-                new String[]{String.valueOf(id)},
-                null, null, null, null);
-        if (cursor == null && cursor.moveToFirst()){
-            return Integer.parseInt(cursor.getString(0));
-        }
-        return 0;
-    }
-
     public DataItem getItemByID(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] projection = {
-                InvEntry._ID,
+        String[] invProjection = {
                 InvEntry.COLUMN_BARCODE,
                 InvEntry.COLUMN_DESC,
                 InvEntry.COLUMN_PRICE
         };
 
-        Cursor cursor = db.query(InvEntry.TABLE_NAME,
-                projection,
+        String[] outProjection = {
+                OutputInvEntry.COLUMN_BARCODE,
+                OutputInvEntry.COLUMN_SQTY,
+                OutputInvEntry.COLUMN_BQTY,
+                OutputInvEntry.COLUMN_LOC,
+                OutputInvEntry.COLUMN_DATE_S,
+                OutputInvEntry.COLUMN_DATE_B
+        };
+
+        Cursor invCursor = db.query(InvEntry.TABLE_NAME,
+                invProjection,
                 InvEntry.COLUMN_BARCODE + "=?",
                 new String[]{id},
                 null, null, null, null);
+        Cursor outCursor = db.query(OutputInvEntry.TABLE_NAME,
+                outProjection,
+                OutputInvEntry.COLUMN_BARCODE + "=?",
+                new String[]{id},
+                null, null, null, null);
+
         //Log.i("DB Handler", cursor.getString(1) + ", " + cursor.getString(2) + ", " + cursor.getString(3));
-        if (cursor != null && cursor.moveToFirst()) {
-            DataItem item = new DataItem(cursor.getString(1), cursor.getString(2),
-                    cursor.getString(3));
+        if (invCursor != null && invCursor.moveToFirst()) {
+            int barcodeIndex = invCursor.getColumnIndex(InvEntry.COLUMN_BARCODE);
+            int descIndex = invCursor.getColumnIndex(InvEntry.COLUMN_DESC);
+            int priceIndex = invCursor.getColumnIndex(InvEntry.COLUMN_PRICE);
+
+            DataItem item = new DataItem(invCursor.getString(barcodeIndex), invCursor.getString(descIndex),
+                    invCursor.getString(priceIndex));
+
+            if (outCursor != null && outCursor.moveToFirst()) {
+                int sQtyIndex = outCursor.getColumnIndex(OutputInvEntry.COLUMN_SQTY);
+                int bQtyIndex = outCursor.getColumnIndex(OutputInvEntry.COLUMN_BQTY);
+                int sDateIndex = outCursor.getColumnIndex(OutputInvEntry.COLUMN_DATE_S);
+                int bDateIndex = outCursor.getColumnIndex(OutputInvEntry.COLUMN_DATE_B);
+                int locIndex = outCursor.getColumnIndex(OutputInvEntry.COLUMN_LOC);
+
+                item.setSQty(outCursor.getString(sQtyIndex));
+                item.setBQty(outCursor.getString(bQtyIndex));
+                item.setSDate(outCursor.getString(sDateIndex));
+                item.setBDate(outCursor.getString(bDateIndex));
+                item.setLocation(outCursor.getString(locIndex));
+            }
+
             return item;
         }
         return null;
@@ -152,7 +177,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public DataItem getNewItembyID(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] projection = {
-                NewItemEntry._ID,
                 NewItemEntry.COLUMN_BARCODE,
                 NewItemEntry.COLUMN_DESC,
                 NewItemEntry.COLUMN_PRICE
@@ -164,8 +188,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 new String[]{id},
                 null, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
-            DataItem item = new DataItem(cursor.getString(1), cursor.getString(2),
-                    cursor.getString(3));
+            int barcodeIndex = cursor.getColumnIndex(NewItemEntry.COLUMN_BARCODE);
+            int descIndex = cursor.getColumnIndex(NewItemEntry.COLUMN_DESC);
+            int priceIndex = cursor.getColumnIndex(NewItemEntry.COLUMN_PRICE);
+
+            DataItem item = new DataItem(cursor.getString(barcodeIndex), cursor.getString(descIndex),
+                    cursor.getString(priceIndex));
             return item;
         }
         return null;
@@ -225,9 +253,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 di = new DataItem();
-                di.setID(cursor.getString(1));
-                di.setDesc(cursor.getString(2));
-                di.setPrice(cursor.getString(3));
+                int barcodeIndex = cursor.getColumnIndex(InvEntry.COLUMN_BARCODE);
+                int descIndex = cursor.getColumnIndex(InvEntry.COLUMN_DESC);
+                int priceIndex = cursor.getColumnIndex(InvEntry.COLUMN_PRICE);
+
+                di.setID(cursor.getString(barcodeIndex));
+                di.setDesc(cursor.getString(descIndex));
+                di.setPrice(cursor.getString(priceIndex));
                 listItems.add(di);
             } while (cursor.moveToNext());
             cursor.close();
@@ -261,8 +293,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 cursor.moveToFirst();
                 for (int i = 0; i < rowCount; i++) {
                     cursor.moveToPosition(i);
-                    bw.write(cursor.getString(1) + ",,,");
-                    bw.write(cursor.getString(2) + "," + cursor.getString(3));
+                    int barcodeIndex = cursor.getColumnIndex(NewItemEntry.COLUMN_BARCODE);
+                    int descIndex = cursor.getColumnIndex(NewItemEntry.COLUMN_DESC);
+                    int priceIndex = cursor.getColumnIndex(NewItemEntry.COLUMN_PRICE);
+
+                    bw.write(cursor.getString(barcodeIndex) + ",,,");
+                    bw.write(cursor.getString(descIndex) + "," + cursor.getString(priceIndex));
                     bw.newLine();
                 }
                 bw.flush();
@@ -292,11 +328,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         LogItem di = null;
         if (cursor.moveToFirst()) {
             do {
+                int barcodeIndex = cursor.getColumnIndex(OrderLogEntry.COLUMN_BARCODE);
+                int vendorIndex = cursor.getColumnIndex(OrderLogEntry.COLUMN_VENDOR);
+                int receivedIndex = cursor.getColumnIndex(OrderLogEntry.COLUMN_QTY_RECEIVED);
+                int dateIndex = cursor.getColumnIndex(OrderLogEntry.COLUMN_DATE);
+
                 di = new LogItem();
-                di.setID(cursor.getString(1));
-                di.setVendor(cursor.getString(2));
-                di.setReceive(cursor.getString(3));
-                di.setDate(cursor.getString(4));
+                di.setID(cursor.getString(barcodeIndex));
+                di.setVendor(cursor.getString(vendorIndex));
+                di.setReceive(cursor.getString(receivedIndex));
+                di.setDate(cursor.getString(dateIndex));
                 listItems.add(di);
             } while (cursor.moveToNext());
             cursor.close();
@@ -390,16 +431,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 null, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
+            int barcodeIndex = cursor.getColumnIndex(RestockEntry.COLUMN_BARCODE);
+            int dateIndex = cursor.getColumnIndex(RestockEntry.COLUMN_DATE);
+            int locIndex = cursor.getColumnIndex(RestockEntry.COLUMN_LOCATION);
+            int sQtyIndex = cursor.getColumnIndex(RestockEntry.COLUMN_QTY_S);
+            int bQtyIndex = cursor.getColumnIndex(RestockEntry.COLUMN_QTY_B);
+            int otherIndex1 = cursor.getColumnIndex(RestockEntry.COLUMN_OTHER1);
+            int otherIndex2 = cursor.getColumnIndex(RestockEntry.COLUMN_OTHER2);
+            int otherIndex3 = cursor.getColumnIndex(RestockEntry.COLUMN_OTHER3);
+            int otherIndex4 = cursor.getColumnIndex(RestockEntry.COLUMN_OTHER4);
+
             RestockItem item = new RestockItem();
-            item.setID(cursor.getString(1));
-            item.setLo_logdate(cursor.getString(2));
-            item.setLo_location(cursor.getString(3));
-            item.setLo_sqty(cursor.getString(4));
-            item.setLo_bqty(cursor.getString(5));
-            item.setLo_other1(cursor.getString(6));
-            item.setLo_other2(cursor.getString(7));
-            item.setLo_other3(cursor.getString(8));
-            item.setLo_other4(cursor.getString(9));
+            item.setID(cursor.getString(barcodeIndex));
+            item.setLo_logdate(cursor.getString(dateIndex));
+            item.setLo_location(cursor.getString(locIndex));
+            item.setLo_sqty(cursor.getString(sQtyIndex));
+            item.setLo_bqty(cursor.getString(bQtyIndex));
+            item.setLo_other1(cursor.getString(otherIndex1));
+            item.setLo_other2(cursor.getString(otherIndex2));
+            item.setLo_other3(cursor.getString(otherIndex3));
+            item.setLo_other4(cursor.getString(otherIndex4));
             return item;
         }
         return null;
@@ -412,10 +463,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         RestockItem di = null;
         if (cursor.moveToFirst()) {
             do {
+                int barcodeIndex = cursor.getColumnIndex(InvEntry.COLUMN_BARCODE);
+                int descIndex = cursor.getColumnIndex(InvEntry.COLUMN_DESC);
+                int priceIndex = cursor.getColumnIndex(InvEntry.COLUMN_PRICE);
+
                 di = new RestockItem();
-                di.setID(cursor.getString(1));
-                di.setDesc(cursor.getString(2));
-                di.setPrice(cursor.getString(3));
+                di.setID(cursor.getString(barcodeIndex));
+                di.setDesc(cursor.getString(descIndex));
+                di.setPrice(cursor.getString(priceIndex));
                 LogItem li = getListofData(di.getID()).get(0);
                 RestockItem ri = getRestockItem(di.getID());
                 if (li != null) {
@@ -504,6 +559,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + OrderLogEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + RestockEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + NewItemEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + OutputInvEntry.TABLE_NAME);
         onCreate(db);
     }
 
@@ -511,6 +567,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         //String filename = "SCINVT.csv";
         //We need the following columns: ID(0), Desc(3), Price1(4)
+
+        // Entering data into the inventory table
         try {
             db.beginTransaction();
             //clear table
@@ -548,6 +606,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db.endTransaction();
         }
 
+        // Entering data into the shipping log table
         try {
             db.beginTransaction();
             String filename = "STKADD.DBF";
@@ -600,17 +659,65 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             //checkLogData();
         }
 
-        /*
+        // Entering values into the output inventory table
         try{
+            db.beginTransaction();
+            String filename = "output_inv.csv";
+            final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsoluteFile(), filename);
+            if (!file.exists()){
+                return "Cannot Find output_inv.csv";
+            }
+
             CSVReader reader = new CSVReader(new FileReader(file), ',');
             List<String[]> allRows = reader.readAll();
             for (String[] row: allRows) {
-                Log.i("DB Handler", row[0] + ", " + row[3] + ", " + row[4]);
+                Log.i("DB Handler", row[0] + ", " + row[6] + ", " + row[7]);
                 ContentValues values = new ContentValues();
-                values.put(KEY_ITEMNO, row[0]);
-                values.put(KEY_DESC, row[3]);
-                values.put(KEY_PRICE, row[4]);
-                db.insert(TABLE_INVENTORY, KEY_ITEMNO, values);
+                values.put(OutputInvEntry.COLUMN_BARCODE, row[0].trim());
+                values.put(OutputInvEntry.COLUMN_SQTY, row[1].trim());
+                values.put(OutputInvEntry.COLUMN_BQTY, row[2].trim());
+                values.put(OutputInvEntry.COLUMN_LOC, row[4].trim());
+
+                String sDate = row[6].trim();
+                if (sDate != null) {
+                    if (!sDate.isEmpty()) {
+                        String[] date = sDate.split("/");
+                        sDate = "";
+                        for (int i = 0; i < date.length; i++) {
+                            String s = date[i];
+                            if (s.length() < 2) {
+                                sDate += "0" + s;
+                            } else {
+                                sDate += s;
+                            }
+                            if (i != date.length - 1) {
+                                sDate += "/";
+                            }
+                        }
+                    }
+                }
+                values.put(OutputInvEntry.COLUMN_DATE_S, sDate);
+
+                sDate = row[7];
+                if (sDate != null) {
+                    if (!sDate.isEmpty()) {
+                        String[] date = sDate.split("/");
+                        sDate = "";
+                        for (int i = 0; i < date.length; i++) {
+                            String s = date[i];
+                            if (s.length() < 2) {
+                                sDate += "0" + s;
+                            } else {
+                                sDate += s;
+                            }
+                            if (i != date.length - 1) {
+                                sDate += "/";
+                            }
+                        }
+                    }
+                }
+                values.put(OutputInvEntry.COLUMN_DATE_B, sDate);
+                db.insert(OutputInvEntry.TABLE_NAME, OutputInvEntry.COLUMN_BARCODE, values);
             }
             db.setTransactionSuccessful();
         } catch (Exception e) {
@@ -619,7 +726,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db.endTransaction();
             //checkData();
         }
-        */
+
         return "Data Sync Successful!";
     }
 

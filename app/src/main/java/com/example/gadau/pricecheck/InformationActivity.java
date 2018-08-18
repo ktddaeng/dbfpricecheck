@@ -24,6 +24,8 @@ import com.example.gadau.pricecheck.logic.LogAdapter;
 import com.example.gadau.pricecheck.logic.MainAdapter;
 import com.example.gadau.pricecheck.logic.SwipeDismissBaseActivity;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class InformationActivity extends SwipeDismissBaseActivity {
@@ -49,6 +51,10 @@ public class InformationActivity extends SwipeDismissBaseActivity {
         TextView infoDollars = (TextView) findViewById(R.id.info_dollars);
         TextView infoCents = (TextView) findViewById(R.id.info_cents);
         ImageView cancelButton = (ImageView) findViewById(R.id.button_cancel);
+        TextView infoSQty = (TextView) findViewById(R.id.output_inv_qty_s);
+        TextView infoBQty = (TextView) findViewById(R.id.output_inv_qty_b);
+        TextView infoSDate = (TextView) findViewById(R.id.output_inv_date_s);
+        TextView infoBDate = (TextView) findViewById(R.id.output_inv_date_b);
         View root = findViewById(R.id.info_main);
         if (getIntent().getExtras().getBoolean(Contants.EXTRA_ISREALDATA)){
             //change background to deep red
@@ -78,6 +84,10 @@ public class InformationActivity extends SwipeDismissBaseActivity {
         }
         infoDollars.setText(price.substring(0, index));
         infoCents.setText(price.substring(index + 1));
+        infoSQty.setText(di.getSQty());
+        infoBQty.setText(di.getBQty());
+        infoSDate.setText(di.getSDateString());
+        infoBDate.setText(di.getBDateString());
 
         if (getIntent().getExtras().getBoolean(Contants.ISMASTER) && getIntent().getExtras().getBoolean(Contants.EXTRA_ISREALDATA)){
             setUpRecycler();

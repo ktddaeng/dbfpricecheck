@@ -15,12 +15,15 @@ public class DataItem implements Parcelable{
     /**
      * Showroom quantity
      */
-    private String sqty_;
+    private String sQty_;
 
     /**
      * Backroom quantity
      */
-    private String bqty_;
+    private String bQty_;
+
+    private String bDate_;
+    private String sDate_;
 
     /**
      * Showroom location
@@ -31,8 +34,8 @@ public class DataItem implements Parcelable{
         ID_ = "123451234512";
         desc_ = "UNKNOWN OBJECT";
         price_ = "123.45";
-        sqty_ = null;
-        bqty_ = null;
+        sQty_ = null;
+        bQty_ = null;
         location_ = null;
     }
 
@@ -40,24 +43,22 @@ public class DataItem implements Parcelable{
         this.ID_ = ID;
         this.desc_ = desc;
         this.price_ = price;
-    }
-
-    public DataItem(String ID, String desc, String price, String sqty, String bqty, String location) {
-        this.ID_ = ID;
-        this.desc_ = desc;
-        this.price_ = price;
-        this.sqty_ = sqty;
-        this.bqty_ = bqty;
-        this.location_ = location;
+        this.sQty_ = null;
+        this.bQty_ = null;
+        this.sDate_ = null;
+        this.bDate_ = null;
+        this.location_ = null;
     }
 
     public DataItem(Parcel pc) {
         ID_ = pc.readString();
         desc_ = pc.readString();
         price_ = pc.readString();
-        sqty_ = pc.readString();
-        bqty_ = pc.readString();
+        sQty_ = pc.readString();
+        bQty_ = pc.readString();
         location_ = pc.readString();
+        sDate_ = pc.readString();
+        bDate_ = pc.readString();
     }
 
     public String getID() {
@@ -73,11 +74,31 @@ public class DataItem implements Parcelable{
     }
 
     public String getSQty() {
-        return sqty_;
+        if (sQty_ == null) {
+            return "";
+        }
+        return sQty_;
     }
 
     public String getBQty() {
-        return bqty_;
+        if (bQty_ == null) {
+            return "";
+        }
+        return bQty_;
+    }
+
+    public String getSDateString() {
+        if (sDate_ == null) {
+            return "";
+        }
+       return sDate_;
+    }
+
+    public String getBDateString() {
+        if (bDate_ == null) {
+            return "";
+        }
+        return bDate_;
     }
 
     public String getLocation() {
@@ -97,11 +118,23 @@ public class DataItem implements Parcelable{
     }
 
     public void setSQty(String sQty) {
-        sqty_= sQty;
+        sQty_ = sQty;
     }
 
     public void setBQty(String bQty) {
-        bqty_ = bQty;
+        bQty_ = bQty;
+    }
+
+    public void setSDate (String sDate) {
+        if (sDate != null) {
+            sDate_ = sDate;
+        } else {
+            sDate_ = "MEMEULTRA";
+        }
+    }
+
+    public void setBDate (String bDate) {
+        bDate_ = bDate;
     }
 
     public void setLocation(String location) {
@@ -118,9 +151,11 @@ public class DataItem implements Parcelable{
         dest.writeString(ID_);
         dest.writeString(desc_);
         dest.writeString(price_);
-        dest.writeString(sqty_);
-        dest.writeString(bqty_);
+        dest.writeString(sQty_);
+        dest.writeString(bQty_);
         dest.writeString(location_);
+        dest.writeString(sDate_);
+        dest.writeString(bDate_);
     }
 
     public static final Parcelable.Creator<DataItem> CREATOR = new Parcelable.Creator<DataItem>(){
