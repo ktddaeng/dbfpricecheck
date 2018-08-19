@@ -15,6 +15,11 @@
     <string name="desc4">(Admin Only) View a list of all items in need of restocking.</string>
     <string name="desc5">(Admin Only) View a list of items not yet registered in the database.</string>
 
+    <!-- TAB HEADERS -->
+    <string name="header_search">Search</string>
+    <string name="header_new">New Items</string>
+    <string name="header_restock">Restock Log</string>
+
     <string name="sample_id">4005808801022</string>
     <string name="sample_desc">COLORBOOK 12PK   </string>
     <string name="sample_dollarsign">$</string>

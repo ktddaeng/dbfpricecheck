@@ -72,7 +72,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textSize="56sp"
+            android:textSize="50sp"
             android:paddingTop="20dp"
             android:textColor="@color/colorMenuText"
             android:text="@string/sample_dollarsign"/>
@@ -80,7 +80,7 @@
             android:id="@+id/info_dollars"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="90sp"
+            android:textSize="80sp"
             android:padding="2dp"
             android:textColor="@color/colorMenuText"
             tools:text="@string/sample_dollars"/>
@@ -89,9 +89,73 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingTop="16dp"
-            android:textSize="40sp"
+            android:textSize="34sp"
             android:textColor="@color/colorMenuText"
             tools:text="@string/sample_cents"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="12dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textColor="@color/colorMenuText"
+                android:layout_weight="2"
+                android:text="Showroom:"/>
+            <TextView
+                android:id="@+id/output_inv_qty_s"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textColor="@color/colorMenuText"
+                android:layout_weight="1"
+                tools:text="99"/>
+            <TextView
+                android:id="@+id/output_inv_date_s"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textColor="@color/colorMenuText"
+                android:textAlignment="textEnd"
+                android:layout_weight="1"
+                tools:text="11/11/1111"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textColor="@color/colorMenuText"
+                android:layout_weight="2"
+                android:text="Stockroom:"/>
+            <TextView
+                android:id="@+id/output_inv_qty_b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textColor="@color/colorMenuText"
+                android:layout_weight="1"
+                tools:text="99"/>
+            <TextView
+                android:id="@+id/output_inv_date_b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textColor="@color/colorMenuText"
+                android:textAlignment="textEnd"
+                android:layout_weight="1"
+                tools:text="11/11/1111"/>
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/rec_restock_info"
@@ -107,14 +171,14 @@
                 android:id="@+id/rec_restock_lastdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:textColor="@color/colorMenuText"
                 android:layout_weight="2"
                 tools:text="11/11/1111"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:textColor="@color/colorMenuText"
                 android:layout_weight="1"
                 android:text="Location:"/>
@@ -122,7 +186,7 @@
                 android:id="@+id/rec_restock_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:textColor="@color/colorMenuText"
                 android:layout_weight="1"
                 tools:text="A2"/>
@@ -134,7 +198,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textColor="@color/colorMenuText"
                 android:layout_weight="1"
                 android:text="Showroom:"/>
@@ -143,13 +207,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorMenuText"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:layout_weight="1"
                 tools:text="55"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textColor="@color/colorMenuText"
                 android:layout_weight="1"
                 android:text="Backstore:"/>
@@ -157,7 +221,7 @@
                 android:id="@+id/rec_restock_backstore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textColor="@color/colorMenuText"
                 android:layout_weight="1"
                 tools:text="55"/>
@@ -166,7 +230,7 @@
             android:id="@+id/rec_restock_other1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14dp"
+            android:textSize="14sp"
 
             android:textColor="@color/colorMenuText"
             tools:text="INSERT TEXT HERE 1"/>
@@ -174,7 +238,7 @@
             android:id="@+id/rec_restock_other2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14dp"
+            android:textSize="14sp"
 
             android:textColor="@color/colorMenuText"
             tools:text="INSERT TEXT HERE 2"/>
@@ -182,7 +246,7 @@
             android:id="@+id/rec_restock_other3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14dp"
+            android:textSize="14sp"
 
             android:textColor="@color/colorMenuText"
             tools:text="INSERT TEXT HERE 3"/>
@@ -190,7 +254,7 @@
             android:id="@+id/rec_restock_other4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14dp"
+            android:textSize="14sp"
 
             android:textColor="@color/colorMenuText"
             tools:text="INSERT TEXT HERE 4"/>
