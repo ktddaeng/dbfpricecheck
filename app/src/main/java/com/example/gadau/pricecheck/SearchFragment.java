@@ -141,22 +141,6 @@ public class SearchFragment extends Fragment implements ItemClickListener{
         qrScan.initiateScan();
     }
 
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            //if qrcode has nothing in it
-            if (result.getContents() == null) {
-                Toast.makeText(getActivity(), "Result Not Found", Toast.LENGTH_LONG).show();
-            } else {
-                identifyID(result.getContents());
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
     private void identifyID (String gottenId) {
         DataItem di = dB.getItemByID(gottenId);
         Log.i("Main", "Status" + (dB.getItemCount()));

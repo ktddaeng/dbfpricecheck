@@ -2,20 +2,18 @@ package com.example.gadau.pricecheck.data;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
-import android.view.View;
 
-import com.example.gadau.pricecheck.R;
 import com.example.gadau.pricecheck.data.DatabaseContract.InvEntry;
 import com.example.gadau.pricecheck.data.DatabaseContract.OutputInvEntry;
 import com.example.gadau.pricecheck.data.DatabaseContract.RestockEntry;
 import com.example.gadau.pricecheck.data.DatabaseContract.OrderLogEntry;
 import com.example.gadau.pricecheck.data.DatabaseContract.NewItemEntry;
+import com.example.gadau.pricecheck.data.DatabaseContract.TaggedItemEntry;
 import com.example.gadau.pricecheck.javadbf.DBFField;
 import com.example.gadau.pricecheck.javadbf.DBFReader;
 
@@ -86,6 +84,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         onCreateRestock(db);
         onCreateNewItem(db);
+        onCreateTaggedItems(db);
     }
 
     public void onCreateRestock(SQLiteDatabase db) {
@@ -110,6 +109,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + NewItemEntry.COLUMN_DESC + " TEXT, "
                 + NewItemEntry.COLUMN_PRICE + " TEXT)";
         db.execSQL(CREATE_RESTOCK);
+    }
+
+    public void onCreateTaggedItems(SQLiteDatabase db) {
+        String CREATE_TAGGED_ITEM = "CREATE TABLE " + TaggedItemEntry.TABLE_NAME + "("
+                + TaggedItemEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + TaggedItemEntry.COLUMN_BARCODE + " TEXT, "
+                + TaggedItemEntry.COLUMN_IDENTICAL_TAG + " INTEGER DEFAULT 0)";
+        db.execSQL(CREATE_TAGGED_ITEM);
     }
 
     @Override
@@ -553,6 +560,113 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * For adding multiple items to the list to be identically grouped by number
+     * @param dataItems
+     * @param tag
+     * @return
+     */
+    public int addTags(List<DataItem> dataItems, int tag) {
+        int rows = 0;
+
+        for (int i = 0; i < dataItems.size(); i++) {
+            rows += addToIdenticalTag(dataItems.get(i).getID(), tag);
+        }
+
+        return rows;
+    }
+
+    /**
+     * Adds item to the tagged item list to be identically grouped by number
+     * @param id - The item that is currently being viewed
+     *        tag - the number tag assigned to the item for grouping
+     * @return # of rows changed
+     */
+    public int addToIdenticalTag(String id, int tag) {
+        int itemTag = getIdenticalTagById(id);
+        int rows = 0;
+        SQLiteDatabase db = getWritableDatabase();
+
+        if (itemTag == -1) {
+            rows++;
+            ContentValues values = new ContentValues();
+            values.put(TaggedItemEntry.COLUMN_BARCODE, id);
+            values.put(TaggedItemEntry.COLUMN_IDENTICAL_TAG, tag);
+            db.insert(TaggedItemEntry.TABLE_NAME, TaggedItemEntry.COLUMN_BARCODE,values);
+        } else if (itemTag != tag){
+            ContentValues values = new ContentValues();
+            values.put(TaggedItemEntry.COLUMN_BARCODE, id);
+            values.put(TaggedItemEntry.COLUMN_IDENTICAL_TAG, tag);
+            String selection = TaggedItemEntry.COLUMN_BARCODE + "=?";
+            String[] selectionArgs = new String[] { id };
+            rows += db.update(TaggedItemEntry.TABLE_NAME, values, selection, selectionArgs);
+        }
+
+        return rows;
+    }
+
+//    public void resolvedConflictingTag(String currentItemId, String addedItemId, int caseNumber) {
+//
+//    }
+
+    /**
+     * Checks if the item is on the tagged items table
+     * @param id
+     * @return the identical tag number (-1 means the item doesn't exist in the table, 0 means its tag is blank)
+     */
+    public int getIdenticalTagById(String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] projection = {
+            TaggedItemEntry.COLUMN_BARCODE,
+            TaggedItemEntry.COLUMN_IDENTICAL_TAG
+        };
+
+        Cursor cursor = db.query(TaggedItemEntry.TABLE_NAME,
+                projection,
+                TaggedItemEntry.COLUMN_BARCODE + "=?",
+                new String[]{id},
+                null, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int identicalIndex = cursor.getColumnIndex(TaggedItemEntry.COLUMN_IDENTICAL_TAG);
+            return cursor.getInt(identicalIndex);
+        }
+        return -1;
+    }
+
+    public List<DataItem> getListIdentical (String id) {
+        int tag = getIdenticalTagById(id);
+        if (tag <= 0) {
+            return null;
+        }
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<DataItem> listItems = new ArrayList<DataItem>();
+        Cursor cursor = db.query(TaggedItemEntry.TABLE_NAME,
+                new String[] {TaggedItemEntry.COLUMN_BARCODE, TaggedItemEntry.COLUMN_IDENTICAL_TAG},
+                TaggedItemEntry.COLUMN_IDENTICAL_TAG + "=?",
+                new String[]{Integer.toString(tag)},
+                null, null, null, null);
+        DataItem di = null;
+        if (cursor.moveToFirst()) {
+            do {
+                String barcode = cursor.getString(cursor.getColumnIndex(TaggedItemEntry.COLUMN_BARCODE));
+                if (!id.equals(barcode)) {
+                    di = getItemByID(barcode);
+                    listItems.add(di);
+                }
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
+        return listItems;
+    }
+
+
+
+    public void clearTaggedItems() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + TaggedItemEntry.TABLE_NAME);
+    }
+
     public void clearDatabase() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + InvEntry.TABLE_NAME);
@@ -560,6 +674,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + RestockEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + NewItemEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + OutputInvEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TaggedItemEntry.TABLE_NAME);
         onCreate(db);
     }
 

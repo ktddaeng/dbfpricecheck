@@ -22,6 +22,7 @@ public final class DatabaseContract {
     public static final String PATH_LOG = "shiplog";
     public static final String PATH_RESTOCK = "restock";
     public static final String PATH_NEW = "newitem";
+    public static final String PATH_TAGS = "tags";
 
     /**
      * Inner class to define the inventory table
@@ -190,5 +191,20 @@ public final class DatabaseContract {
         public static final String COLUMN_DESC = "description";
 
         public static final String COLUMN_PRICE = "price";
+    }
+
+    public static final class TaggedItemEntry implements BaseColumns {
+        public static final String TABLE_NAME = "taggeditem";
+
+        /**
+         * Primary key (not barcode)
+         */
+        public static final String _ID = BaseColumns._ID;
+
+        public static final String COLUMN_BARCODE = "barcode";
+
+        public static final String COLUMN_IDENTICAL_TAG = "identical";
+
+        public static int tagCount = 1;
     }
 }

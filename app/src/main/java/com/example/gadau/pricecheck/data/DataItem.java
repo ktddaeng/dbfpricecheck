@@ -3,11 +3,13 @@ package com.example.gadau.pricecheck.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Created by gadau on 8/16/2017.
  */
 
-public class DataItem implements Parcelable{
+public class DataItem implements Parcelable {
     private String ID_;
     private String desc_;
     private String price_;
