@@ -6,198 +6,152 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="16dp"
+    android:paddingTop="16dp"
+    android:paddingLeft="16dp"
+    android:paddingBottom="16dp"
     android:id="@+id/info_main"
     tools:background="@color/colorPrimary"
     tools:context="com.example.gadau.pricecheck.InformationActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingRight="16dp">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <ImageView
-                android:id="@+id/button_cancel"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_cancel_white_36dp"/>
-
+            android:layout_gravity="left"
+            android:orientation="horizontal">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="2dp"
-                android:layout_gravity="left">
-                <TextView
-                    android:layout_width="match_parent"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/button_cancel"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_cancel_white_36dp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="34sp"
-                    android:textColor="@color/colorMenuText"
-                    android:text="#"/>
-                <TextView
-                    android:id="@+id/info_id"
-                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="2dp"
+                    android:layout_gravity="left">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="34sp"
+                        android:textColor="@color/colorMenuText"
+                        android:text="#"/>
+                    <TextView
+                        android:id="@+id/info_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="34sp"
+                        android:textColor="@color/colorMenuText"
+                        tools:text="@string/sample_id"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right">
+                <ToggleButton
+                    android:id="@+id/button_restock"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="34sp"
-                    android:textColor="@color/colorMenuText"
-                    tools:text="@string/sample_id"/>
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/info_desc"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right">
-            <ToggleButton
-                android:id="@+id/button_restock"
+            android:textSize="24sp"
+            android:textColor="@color/colorMenuText"
+            tools:text="@string/sample_desc"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="top">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="56sp"
+                android:paddingTop="20dp"
+                android:textColor="@color/colorMenuText"
+                android:text="@string/sample_dollarsign"/>
+            <TextView
+                android:id="@+id/info_dollars"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone" />
+                android:textSize="90sp"
+                android:padding="2dp"
+                android:textColor="@color/colorMenuText"
+                tools:text="@string/sample_dollars"/>
+            <TextView
+                android:id="@+id/info_cents"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingTop="16dp"
+                android:textSize="40sp"
+                android:textColor="@color/colorMenuText"
+                tools:text="@string/sample_cents"/>
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#fff"/>
+        <TextView
+            style="@style/TextLabelInfo"
+            android:text="@string/str_label_order"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#fff"
+            android:layout_marginBottom="10dp"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rec_log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/fragment_log"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="#fff"/>
+        <TextView
+            style="@style/TextLabelInfo"
+            android:text="@string/str_label_rest"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#fff"
+            android:layout_marginBottom="10dp"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rest_log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/fragment_log2"/>
     </LinearLayout>
-    <TextView
-        android:id="@+id/info_desc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textColor="@color/colorMenuText"
-        tools:text="@string/sample_desc"/>
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="top">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textSize="56sp"
-            android:paddingTop="20dp"
-            android:textColor="@color/colorMenuText"
-            android:text="@string/sample_dollarsign"/>
-        <TextView
-            android:id="@+id/info_dollars"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="90sp"
-            android:padding="2dp"
-            android:textColor="@color/colorMenuText"
-            tools:text="@string/sample_dollars"/>
-        <TextView
-            android:id="@+id/info_cents"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingTop="16dp"
-            android:textSize="40sp"
-            android:textColor="@color/colorMenuText"
-            tools:text="@string/sample_cents"/>
+            android:orientation="vertical">
+        <ImageView
+            android:id="@+id/button_add"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_add_circle_outline_white_24dp"/>
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/rec_restock_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="4dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/rec_restock_lastdate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14dp"
-                android:textColor="@color/colorMenuText"
-                android:layout_weight="2"
-                tools:text="11/11/1111"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14dp"
-                android:textColor="@color/colorMenuText"
-                android:layout_weight="1"
-                android:text="Location:"/>
-            <TextView
-                android:id="@+id/rec_restock_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14dp"
-                android:textColor="@color/colorMenuText"
-                android:layout_weight="1"
-                tools:text="A2"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:textColor="@color/colorMenuText"
-                android:layout_weight="1"
-                android:text="Showroom:"/>
-            <TextView
-                android:id="@+id/rec_restock_showroom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorMenuText"
-                android:textSize="20dp"
-                android:layout_weight="1"
-                tools:text="55"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:textColor="@color/colorMenuText"
-                android:layout_weight="1"
-                android:text="Backstore:"/>
-            <TextView
-                android:id="@+id/rec_restock_backstore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:textColor="@color/colorMenuText"
-                android:layout_weight="1"
-                tools:text="55"/>
-        </LinearLayout>
-        <TextView
-            android:id="@+id/rec_restock_other1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14dp"
-
-            android:textColor="@color/colorMenuText"
-            tools:text="INSERT TEXT HERE 1"/>
-        <TextView
-            android:id="@+id/rec_restock_other2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14dp"
-
-            android:textColor="@color/colorMenuText"
-            tools:text="INSERT TEXT HERE 2"/>
-        <TextView
-            android:id="@+id/rec_restock_other3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14dp"
-
-            android:textColor="@color/colorMenuText"
-            tools:text="INSERT TEXT HERE 3"/>
-        <TextView
-            android:id="@+id/rec_restock_other4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14dp"
-
-            android:textColor="@color/colorMenuText"
-            tools:text="INSERT TEXT HERE 4"/>
-    </LinearLayout>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rec_log"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/fragment_log"/>
+</ScrollView>
 </LinearLayout>
