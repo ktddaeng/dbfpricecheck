@@ -39,6 +39,9 @@ public class InfoAdapter extends FragmentPagerAdapter {
         if (mIdenticalInfoFragment != null) {
             mIdenticalInfoFragment.refreshPage();
         }
+        if (mMainInfoFragment != null) {
+            mMainInfoFragment.refresh();
+        }
     }
 
     @Override

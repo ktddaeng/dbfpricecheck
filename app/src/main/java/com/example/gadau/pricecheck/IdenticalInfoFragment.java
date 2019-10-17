@@ -27,19 +27,21 @@ import com.example.gadau.pricecheck.data.DatabaseContract;
 import com.example.gadau.pricecheck.data.DatabaseHandler;
 import com.example.gadau.pricecheck.logic.AnyOrientationActivity;
 import com.example.gadau.pricecheck.logic.IdenticalItemAdapter;
+import com.example.gadau.pricecheck.logic.ItemClickListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class IdenticalInfoFragment extends Fragment {
+public class IdenticalInfoFragment extends Fragment implements ItemClickListener {
     private IdenticalItemAdapter mAdapter;
     private View mRootView;
     private View mEmptyView;
     private RecyclerView mRecycleView;
     private DatabaseHandler mDb;
     private DataItem mDi;
+    private List<DataItem> mListOfData;
 
     @Nullable
     @Override
@@ -63,8 +65,9 @@ public class IdenticalInfoFragment extends Fragment {
         } else {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
             mRecycleView.setLayoutManager(layoutManager);
-            List<DataItem> listOfData = mDb.getListIdentical(mDi.getID());
-            mAdapter = new IdenticalItemAdapter(listOfData);
+            mListOfData = mDb.getListIdentical(mDi.getID());
+            mAdapter = new IdenticalItemAdapter(mListOfData);
+            mAdapter.setClickListener(this);
             mRecycleView.setAdapter(mAdapter);
 
             mRecycleView.setVisibility(View.VISIBLE);
@@ -72,7 +75,36 @@ public class IdenticalInfoFragment extends Fragment {
         }
     }
 
+    private void updateRecycler() {
+
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        final DataItem di = mListOfData.get(position);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Remove " + di.getID() + " from identical list?");
+        builder
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        mDb.deleteIdenticalItem(di.getID());
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     public void refreshPage() {
+
         if (mDb.getIdenticalTagById(mDi.getID()) < 1) {
             mRecycleView.setVisibility(View.GONE);
             mEmptyView.setVisibility(View.VISIBLE);
@@ -82,8 +114,13 @@ public class IdenticalInfoFragment extends Fragment {
             if (listOfData.size() < 1) {
                 mRecycleView.setVisibility(View.GONE);
                 mEmptyView.setVisibility(View.VISIBLE);
+
+                // Deletes the item from the table to save some space
+                mDb.deleteIdenticalItem(mDi.getID());
+
             } else {
                 mAdapter.updateData(listOfData);
+                mAdapter.setClickListener(this);
                 mRecycleView.setAdapter(mAdapter);
 
                 mRecycleView.setVisibility(View.VISIBLE);

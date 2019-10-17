@@ -196,4 +196,8 @@ public class MainInfoFragment extends Fragment {
         getActivity().finish();
         startActivity(getActivity().getIntent());
     }
+
+    public void refresh() {
+        setUpRestock(mDi.getID());
+    }
 }

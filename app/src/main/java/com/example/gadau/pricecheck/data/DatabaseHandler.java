@@ -660,7 +660,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return listItems;
     }
 
-
+    public int deleteIdenticalItem(String id) {
+        SQLiteDatabase db = getWritableDatabase();
+        if (getIdenticalTagById(id) > -1) {
+            int rows = db.delete(TaggedItemEntry.TABLE_NAME,
+                    TaggedItemEntry.COLUMN_BARCODE + "=?",
+                    new String[] { id });
+            return rows;
+        }
+        return 0;
+    }
 
     public void clearTaggedItems() {
         SQLiteDatabase db = this.getWritableDatabase();

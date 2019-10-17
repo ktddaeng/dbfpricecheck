@@ -1,5 +1,6 @@
 package com.example.gadau.pricecheck.logic;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import java.util.List;
 
 public class IdenticalItemAdapter extends RecyclerView.Adapter<IdenticalItemAdapter.IdenticalListItem> {
     private List<DataItem> mListOfData;
+    private Context mContext;
+    private ItemClickListener mClickListener;
 
     public IdenticalItemAdapter(List<DataItem> list) {
         mListOfData = list;
@@ -23,7 +26,8 @@ public class IdenticalItemAdapter extends RecyclerView.Adapter<IdenticalItemAdap
 
     @Override
     public IdenticalListItem onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_identical, parent, false);
+        mContext = parent.getContext();
+        View v = LayoutInflater.from(mContext).inflate(R.layout.list_item_identical, parent, false);
         return new IdenticalListItem(v);
     }
 
@@ -51,7 +55,13 @@ public class IdenticalItemAdapter extends RecyclerView.Adapter<IdenticalItemAdap
         notifyDataSetChanged();
     }
 
-    public class IdenticalListItem extends RecyclerView.ViewHolder {
+    public void setClickListener(ItemClickListener itemClickListener) {
+        if (mClickListener == null) {
+            mClickListener = itemClickListener;
+        }
+    }
+
+    public class IdenticalListItem extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView iID;
         public TextView iDesc;
         public TextView iShowQty;
@@ -59,10 +69,16 @@ public class IdenticalItemAdapter extends RecyclerView.Adapter<IdenticalItemAdap
 
         public IdenticalListItem (View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             iID = (TextView) itemView.findViewById(R.id.identical_id_textview);
             iDesc = (TextView) itemView.findViewById(R.id.identical_desc_textview);
             iShowQty = (TextView) itemView.findViewById(R.id.identical_showqty_textview);
             iBackQty = (TextView) itemView.findViewById(R.id.identical_backqty_textview);
+        }
+
+        @Override
+        public void onClick(View view) {
+            mClickListener.onClick(view, getAdapterPosition());
         }
     }
 }

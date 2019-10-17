@@ -333,13 +333,25 @@ public class InformationActivity extends AppCompatActivity {//extends SwipeDismi
     }
 
     private int addMultipleIdenticals(List<DataItem> list, SparseBooleanArray checkedItems, int tag) {
-        int rowsChanged = 0;;
+        int rowsChanged = 0;
+        int numFalse = 0;
+        int index = -1;
 
-        for (int i = 0; i < checkedItems.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             if (checkedItems.get(i)) {
                 mDb.addToIdenticalTag(list.get(i).getID(), tag);
+            } else {
+                numFalse++;
+                if (index < 0) {
+                    index = i;
+                }
             }
         }
+
+//        if (numFalse == 1) {
+//            mDb.deleteIdenticalItem(list.get(index).getID());
+//            Toast.makeText(this, "Deleted an item", Toast.LENGTH_SHORT);
+//        }
         return rowsChanged;
     }
 
@@ -350,8 +362,6 @@ public class InformationActivity extends AppCompatActivity {//extends SwipeDismi
         recycleView.setLayoutManager(layoutManager);
         mSuggestedAdapter = new SuggestedItemAdapter(list);
         recycleView.setAdapter(mSuggestedAdapter);
-//
-//        recycleView.setVisibility(View.VISIBLE);
     }
 
     private void wouldLikeNewItem(String gottenId) {
