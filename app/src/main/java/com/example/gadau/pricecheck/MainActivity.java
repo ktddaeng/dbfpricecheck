@@ -7,8 +7,12 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.provider.SyncStateContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,6 +37,7 @@ import com.example.gadau.pricecheck.data.DataItem;
 import com.example.gadau.pricecheck.data.DatabaseHandler;
 import com.example.gadau.pricecheck.data.MenuOption;
 import com.example.gadau.pricecheck.logic.AnyOrientationActivity;
+import com.example.gadau.pricecheck.logic.CategoryAdapter;
 import com.example.gadau.pricecheck.logic.ItemClickListener;
 import com.example.gadau.pricecheck.logic.MainAdapter;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -43,37 +48,27 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, ItemClickListener {
-    private IntentIntegrator qrScan;
+public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     private DatabaseHandler dB;
-    private RecyclerView mRecycleView;
-    private List<MenuOption> listOfData;
-    private MainAdapter mAdapter;
+    private SharedPreferences preferences;
     private AlertDialog progressDialog;
     private AlertDialog.Builder progressBuild;
-    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         preferences = getSharedPreferences(Contants.SETTINGS, MODE_PRIVATE);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
 
-        listOfData = new ArrayList<>();
-        listOfData.add(new MenuOption(R.string.header1, R.string.desc1, R.color.colorAccent2));
-        listOfData.add(new MenuOption(R.string.header2, R.string.desc2, R.color.colorPrimary));
-        listOfData.add(new MenuOption(R.string.header3, R.string.desc3, R.color.colorAccent));
-        listOfData.add(new MenuOption(R.string.header5, R.string.desc5, R.color.colorRedBG));
-        listOfData.add(new MenuOption(R.string.header4, R.string.desc4, R.color.colorPrimaryDark));
+        CategoryAdapter adapter = new CategoryAdapter(this, getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
 
-        setUpToolbar();
-        setUpRecycler();
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
         dB = DatabaseHandler.getInstance(this);
-
-        if (savedInstanceState != null){
-            finish();
-        }
+        tabLayout.setupWithViewPager(viewPager);
+        setUpToolbar();
     }
 
     private void setUpToolbar(){
@@ -84,100 +79,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         toolbar.setTitle(R.string.app_name); toolbar.setSubtitle("");
     }
 
-    private void setUpRecycler() {
-        mRecycleView = (RecyclerView) findViewById(R.id.rec_main);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecycleView.setLayoutManager(layoutManager);
-
-        mAdapter = new MainAdapter(listOfData);
-        mRecycleView.setAdapter(mAdapter);
-        mAdapter.setClickListener(this);
-    }
-
     @Override
-    public void onClick(View view, int position) {
-        final MenuOption data = listOfData.get(position);
-        switch (data.getHeader()) {
-            case R.string.header1:
-                barcodeMode();
-                break;
-            case R.string.header2:
-                inputNumberSearch();
-                break;
-            case R.string.header3:
-                syncDatabase();
-                break;
-            case R.string.header4:
-                launchRestockPage();
-                break;
-            case R.string.header5:
-                launchNewItemPage();
-                break;
-        }
-    }
-
-    private void inputNumberSearch(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle("Input ID");
-        View subView = getLayoutInflater().inflate(R.layout.fragment_edit_id, null);
-        final EditText inID = (EditText) subView.findViewById(R.id.input_dialog_IDNo);
-        builder.setView(subView);
-        inID.requestFocus();
-
-        builder
-                .setCancelable(true)
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        identifyID(inID.getText().toString());
-                        dialog.dismiss();
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        Toast.makeText(MainActivity.this, "Search Canceled", Toast.LENGTH_SHORT).show();
-                    }
-                });
-        final AlertDialog dialog = builder.create();
-        if (getResources().getConfiguration().hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO){
-            Toast.makeText(this, "Bluetooth Scanner Detected", Toast.LENGTH_SHORT).show();
-            inID.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (inID.getText().length() >= 12){
-                        identifyID(inID.getText().toString());
-                        dialog.dismiss();
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                }
-            });
-        }
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        dialog.show();
-    }
-
-    //Launches the Barcode Scanner
-    private void barcodeMode(){
-        qrScan = new IntentIntegrator(this);
-        qrScan.setCaptureActivity(AnyOrientationActivity.class);
-        qrScan.setOrientationLocked(false);
-        qrScan.setPrompt("Scan a barcode");
-        qrScan.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
-        qrScan.initiateScan();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             //if qrcode has nothing in it
@@ -191,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         }
     }
 
-    private void identifyID (String gottenId) {
+    public void identifyID (String gottenId) {
         DataItem di = dB.getItemByID(gottenId);
         Log.i("Main", "Status" + (dB.getItemCount()));
         if (di != null) {
@@ -249,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         final String id = gottenId;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Enter Item Information");
-        View subView = getLayoutInflater().inflate(R.layout.fragment_edit_newitem, null);
+        View subView = this.getLayoutInflater().inflate(R.layout.fragment_edit_newitem, null);
         final EditText inID = (EditText) subView.findViewById(R.id.input_dialog_id);
         final EditText inDesc = (EditText) subView.findViewById(R.id.input_dialog_desc);
         final EditText inPrice = (EditText) subView.findViewById(R.id.input_dialog_price);
@@ -294,18 +197,79 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         dialog.show();
     }
 
-    private void launchRestockPage(){
-        if (!preferences.getBoolean(Contants.ISMASTER, true)){
-            Toast.makeText(this, "Acess Denied. Admin Only.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Intent i = new Intent(this, RestockActivity.class);
-        startActivity(i);
+
+    public void showMenu(View v){
+        PopupMenu popup = new PopupMenu(this, v);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.menu_options, popup.getMenu());
+
+        popup.show();
+        Log.i("Main", "Admin Mode " + preferences.getBoolean(Contants.ISMASTER, true));
+        popup.getMenu().getItem(1).setChecked(preferences.getBoolean(Contants.ISMASTER, true));
+        popup.setOnMenuItemClickListener(this);
     }
 
-    private void launchNewItemPage(){
-        Intent i = new Intent(this, UnfinishActivity.class);
-        startActivity(i);
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        final MenuItem it = item;
+        switch(item.getItemId()) {
+            case R.id.options_main_help:
+                //TODO: Help page
+                Toast.makeText(this, "Under Construction", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.options_main_purge:
+                onPurge();
+                return true;
+            case R.id.options_sync_data:
+                syncDatabase();
+                return true;
+            case R.id.options_main_master:
+                if (!item.isChecked()){
+                    //Set permission for admin mode
+                    final AlertDialog.Builder alertA = new AlertDialog.Builder(this);
+                    View subView = getLayoutInflater().inflate(R.layout.fragment_pass, null);
+                    alertA.setView(subView);
+                    final EditText inPass = (EditText) subView.findViewById(R.id.input_pass);
+                    inPass.requestFocus();
+                    alertA.setTitle("Enter PIN")
+                            .setCancelable(true)
+                            .setPositiveButton("Enter", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (inPass.getText().toString().equals(Contants.PINPASS)){
+                                        toggleButton(it);
+                                        Toast.makeText(MainActivity.this, "Set Admin Mode", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        dialog.dismiss();
+                                        Toast.makeText(MainActivity.this, "Password Not Accepted", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    Toast.makeText(MainActivity.this, "Action Canceled", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    AlertDialog alertDialog = alertA.create();
+                    alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                    alertDialog.show();
+                } else {
+                    //set regular mode
+                    toggleButton(item);
+                    Toast.makeText(this, "Set Regular Mode", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+        }
+        return false;
+    }
+
+    private void toggleButton(MenuItem mi){
+        mi.setChecked(!(mi.isChecked()));
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.putBoolean(Contants.ISMASTER, mi.isChecked());
+        edit.commit();
     }
 
     private void syncDatabase(){
@@ -366,77 +330,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         }
     }
 
-    public void showMenu(View v){
-        PopupMenu popup = new PopupMenu(this, v);
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.menu_options, popup.getMenu());
-
-        popup.show();
-        Log.i("Main", "Admin Mode " + preferences.getBoolean(Contants.ISMASTER, true));
-        popup.getMenu().getItem(1).setChecked(preferences.getBoolean(Contants.ISMASTER, true));
-        popup.setOnMenuItemClickListener(this);
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        final MenuItem it = item;
-        switch(item.getItemId()) {
-            case R.id.options_main_help:
-                //TODO: Help page
-                Toast.makeText(this, "Under Construction", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.options_main_purge:
-                onPurge();
-                return true;
-            case R.id.options_main_master:
-                if (!item.isChecked()){
-                    //Set permission for admin mode
-                    final AlertDialog.Builder alertA = new AlertDialog.Builder(this);
-                    View subView = getLayoutInflater().inflate(R.layout.fragment_pass, null);
-                    alertA.setView(subView);
-                    final EditText inPass = (EditText) subView.findViewById(R.id.input_pass);
-                    inPass.requestFocus();
-                    alertA.setTitle("Enter PIN")
-                            .setCancelable(true)
-                            .setPositiveButton("Enter", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if (inPass.getText().toString().equals(Contants.PINPASS)){
-                                        toggleButton(it);
-                                        Toast.makeText(MainActivity.this, "Set Admin Mode", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        dialog.dismiss();
-                                        Toast.makeText(MainActivity.this, "Password Not Accepted", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            })
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    Toast.makeText(MainActivity.this, "Action Canceled", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                    AlertDialog alertDialog = alertA.create();
-                    alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-                    alertDialog.show();
-                } else {
-                    //set regular mode
-                    toggleButton(item);
-                    Toast.makeText(this, "Set Regular Mode", Toast.LENGTH_SHORT).show();
-                }
-                return true;
-        }
-        return false;
-    }
-
-    private void toggleButton(MenuItem mi){
-        mi.setChecked(!(mi.isChecked()));
-        SharedPreferences.Editor edit = preferences.edit();
-        edit.putBoolean(Contants.ISMASTER, mi.isChecked());
-        edit.commit();
-    }
-
     private void onPurge() {
         AlertDialog.Builder alertA = new AlertDialog.Builder(this);
         alertA.setTitle("Delete the Database?");
@@ -483,4 +376,5 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             importData();
         }
     }
+
 }

@@ -3,6 +3,8 @@
     <item
         android:id="@+id/options_main_purge"
         android:title="@string/str_button_purge"/>
+    <item android:id="@+id/options_sync_data"
+        android:title="Sync Database" />
     <item
         android:id="@+id/options_main_master"
         android:title="@string/str_button_master"

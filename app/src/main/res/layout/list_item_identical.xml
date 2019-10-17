@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/identical_list_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryLight"
+    android:orientation="horizontal"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:paddingLeft="8dp"
+    android:gravity="center_vertical">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3">
+
+        <TextView
+            android:id="@+id/identical_desc_textview"
+            style="@style/ListStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="item description" />
+
+        <TextView
+            android:id="@+id/item_hashtag_textview"
+            style="@style/ListStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/identical_desc_textview"
+            android:text="#"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/identical_id_textview"
+            style="@style/ListStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/identical_desc_textview"
+            android:layout_toRightOf="@id/item_hashtag_textview"
+            android:textSize="16sp"
+            tools:text="0000000" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/identical_showqty_textview"
+            style="@style/ListStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            tools:text="99" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/identical_backqty_textview"
+            style="@style/ListStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            tools:text="99" />
+    </LinearLayout>
+
+
+</LinearLayout>

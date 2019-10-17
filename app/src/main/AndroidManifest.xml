@@ -37,13 +37,8 @@
         <activity
             android:name=".logic.SwipeDismissBaseActivity"
             android:configChanges="orientation|keyboard|keyboardHidden" />
-        <activity
-            android:name=".RestockActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden" />
-        <activity
-            android:name=".UnfinishActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden" />
         <activity android:name=".ResInfoActivity"></activity>
+
     </application>
 
 </manifest>
