@@ -127,7 +127,7 @@ public class MainInfoFragment extends Fragment {
         if (!preferences.getBoolean(Contants.ISMASTER, true)){
             return;
         }
-        //TODO: Pass information here
+        //Pass information here
         Intent i = new Intent(getContext(), ResInfoActivity.class);
         i.putExtra(Contants.EXTRA_DATAITEM, mDi.getID());
         if (isNewItem){

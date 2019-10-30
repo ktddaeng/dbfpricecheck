@@ -186,5 +186,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
-        android:padding="16dp"/>
+        android:padding="16dp"
+        android:src="@drawable/baseline_add_white_36"/>
 </RelativeLayout>

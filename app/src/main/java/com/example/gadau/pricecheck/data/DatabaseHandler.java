@@ -17,11 +17,13 @@ import com.example.gadau.pricecheck.data.DatabaseContract.TaggedItemEntry;
 import com.example.gadau.pricecheck.javadbf.DBFField;
 import com.example.gadau.pricecheck.javadbf.DBFReader;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +31,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import au.com.bytecode.opencsv.CSVReader;
+import com.opencsv.CSVParser;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReaderBuilder;
 
 /**
  * Created by gadau on 8/16/2017.
@@ -288,7 +293,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsoluteFile();
         String filename = "NewItemTable_"+ date +".csv";
 
-        //TODO: account for gaps and unfilled spaces in the original form
+        //accounts for gaps and unfilled spaces in the original form
         try {
             File saveFile = new File(path, filename);
             FileWriter fw = new FileWriter(saveFile);
@@ -784,25 +789,51 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
         // Entering values into the output inventory table
+        CSVReader reader;
         try{
             db.beginTransaction();
+            char delimiter = ',';   //default delimiter is comma unless header says otherwise
             String filename = "output_inv.csv";
             final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsoluteFile(), filename);
             if (!file.exists()){
                 return "Cannot Find output_inv.csv";
             }
 
-            CSVReader reader = new CSVReader(new FileReader(file), ',');
+            //Check if file is separated by commas or semicolons, and change delimiter as needed
+            BufferedReader headerTest = new BufferedReader(new FileReader(file));
+            String header = headerTest.readLine();
+            int semicolonCt = header.length() - header.replace(";", "").length();
+            if (semicolonCt > 0) {
+                Log.i("DB Handler", "Semicolon delimiter, switching characters...");
+                delimiter = ';';
+            }
+            headerTest.close();
+
+            //Begin scan
+//            CSVReader reader = new CSVReader(new FileReader(file), delimiter);
+            CSVParser parser = new CSVParserBuilder().withSeparator(delimiter).build();
+            reader = new CSVReaderBuilder(new FileReader(file)).withCSVParser(parser).build();
             List<String[]> allRows = reader.readAll();
             for (String[] row: allRows) {
-                Log.i("DB Handler", row[0] + ", " + row[6] + ", " + row[7]);
+                //Skip adding item if no information is added.
+                if (row.length < 2) {
+                    continue;
+                }
+
+//                Log.i("DB Handler", row[0] + ", " + row[1] + ", " + row[5] + ", " + row[10] + ", " + row[11]);
                 ContentValues values = new ContentValues();
                 values.put(OutputInvEntry.COLUMN_BARCODE, row[0].trim());
-                values.put(OutputInvEntry.COLUMN_SQTY, row[1].trim());
-                values.put(OutputInvEntry.COLUMN_BQTY, row[2].trim());
-                values.put(OutputInvEntry.COLUMN_LOC, row[4].trim());
+                if (delimiter == ';') {
+                    values.put(OutputInvEntry.COLUMN_SQTY, row[1].trim());
+                    values.put(OutputInvEntry.COLUMN_BQTY, row[5].trim());
+                    values.put(OutputInvEntry.COLUMN_LOC, row[8].trim());
+                } else {
+                    values.put(OutputInvEntry.COLUMN_SQTY, row[1].trim());
+                    values.put(OutputInvEntry.COLUMN_BQTY, row[2].trim());
+                    values.put(OutputInvEntry.COLUMN_LOC, row[4].trim());
+                }
 
-                String sDate = row[6].trim();
+                String sDate = (delimiter == ';') ? row[10].trim() : row[6].trim();
                 if (sDate != null) {
                     if (!sDate.isEmpty()) {
                         String[] date = sDate.split("/");
@@ -822,7 +853,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 }
                 values.put(OutputInvEntry.COLUMN_DATE_S, sDate);
 
-                sDate = row[7];
+                sDate = (delimiter == ';') ? row[11].trim() : row[7];
                 if (sDate != null) {
                     if (!sDate.isEmpty()) {
                         String[] date = sDate.split("/");
@@ -843,9 +874,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 values.put(OutputInvEntry.COLUMN_DATE_B, sDate);
                 db.insert(OutputInvEntry.TABLE_NAME, OutputInvEntry.COLUMN_BARCODE, values);
             }
+            reader.close();
             db.setTransactionSuccessful();
         } catch (Exception e) {
             e.printStackTrace();
+            return "Error: Data Sync Failed";
         } finally {
             db.endTransaction();
             //checkData();

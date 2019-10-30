@@ -54,6 +54,7 @@ public class InformationActivity extends AppCompatActivity {//extends SwipeDismi
         mDb = new DatabaseHandler(this);
 //        Toast.makeText(this, "Swipe Right to Close", Toast.LENGTH_SHORT).show();
 
+        Log.i("InformationActivity", "attempting setup of info page");
         TextView infoID = (TextView) findViewById(R.id.info_id);
         TextView infoDesc = (TextView) findViewById(R.id.info_desc);
         TextView infoDollars = (TextView) findViewById(R.id.info_dollars);
@@ -75,10 +76,12 @@ public class InformationActivity extends AppCompatActivity {//extends SwipeDismi
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i("InformationActivity", "exiting page");
                 InformationActivity.this.finish();
             }
         });
 
+        Log.i("InformationActivity", "receiving information from package");
         mDi = getIntent().getParcelableExtra(Contants.EXTRA_DATAITEM);
 
         String price = mDi.getPrice();
@@ -104,6 +107,7 @@ public class InformationActivity extends AppCompatActivity {//extends SwipeDismi
         viewPager.setAdapter(mInfoAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
+        Log.i("InformationActivity", "setup FAB");
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.identical_add_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

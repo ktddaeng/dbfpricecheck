@@ -95,6 +95,7 @@ public class SearchFragment extends Fragment implements ItemClickListener{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         identifyID(inID.getText().toString());
+                        Log.i("SearchFragment", "Entered pressed okay normally");
                         dialog.dismiss();
                     }
                 })
@@ -108,24 +109,25 @@ public class SearchFragment extends Fragment implements ItemClickListener{
         final AlertDialog dialog = builder.create();
         if (getResources().getConfiguration().hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO){
             Toast.makeText(getActivity(), "Bluetooth Scanner Detected", Toast.LENGTH_SHORT).show();
-            inID.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (inID.getText().length() >= 12){
-                        identifyID(inID.getText().toString());
-                        dialog.dismiss();
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                }
-            });
+            //FIXME: Bug in automatic bluetooth scanning
+//            inID.addTextChangedListener(new TextWatcher() {
+//                @Override
+//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//                }
+//
+//                @Override
+//                public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                    if (inID.getText().length() >= 12){
+//                        identifyID(inID.getText().toString());
+//                        dialog.dismiss();
+//                    }
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable s) {
+//                }
+//            });
         }
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialog.show();
@@ -142,9 +144,11 @@ public class SearchFragment extends Fragment implements ItemClickListener{
     }
 
     private void identifyID (String gottenId) {
+        Log.i("SearchFragment", "Entered identifyID");
         DataItem di = dB.getItemByID(gottenId);
         Log.i("Main", "Status" + (dB.getItemCount()));
         if (di != null) {
+            Log.i("SearchFragment", "attempted page launch");
             launchInfoPage(di, true);
         } else {
             di = dB.getNewItembyID(gottenId);
@@ -158,6 +162,7 @@ public class SearchFragment extends Fragment implements ItemClickListener{
     }
 
     private void launchInfoPage(DataItem di, boolean isRealData){
+        Log.i("SearchFragment", "Entered Launch Info Page");
         Intent i = new Intent(getActivity(), InformationActivity.class);
         i.putExtra(Contants.EXTRA_DATAITEM, di);
         i.putExtra(Contants.ISMASTER, preferences.getBoolean(Contants.ISMASTER, true));

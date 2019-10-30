@@ -12,6 +12,7 @@ This app was made as a management tool for a local gift shop & convenience store
 * 2.0.0.0 Bluetooth Scanner Support
 * 2.1.0.0 Enhanced Restock Log to display most recent order (9/17/17)
 * 3.0.0.0 New Item Feature Support (9/19/17)
+* 3.1.1.0 Updated UI Layout and minor bug fixes for newer OS versions (10/29/19)
 
 ## Prerequisites
 * Android SDK 25 (Minimum SDK 19)
